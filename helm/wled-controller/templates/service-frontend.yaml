@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "wled-controller.fullname" . }}-frontend
+  labels:
+    {{- include "wled-controller.labels" . | nindent 4 }}
+spec:
+  selector:
+    {{- include "wled-controller.frontendSelectorLabels" . | nindent 4 }}
+  ports:
+    - port: {{ .Values.frontend.service.port }}
+      targetPort: 80
+      name: http

@@ -1,0 +1,60 @@
+{{- if .Values.mongodb.enabled }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "wled-controller.fullname" . }}-mongo
+  labels:
+    {{- include "wled-controller.labels" . | nindent 4 }}
+spec:
+  serviceName: {{ include "wled-controller.fullname" . }}-mongo
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "wled-controller.name" . }}-mongo
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "wled-controller.name" . }}-mongo
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: mongo
+          image: {{ .Values.mongodb.image }}
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: data
+              mountPath: /data/db
+          readinessProbe:
+            exec:
+              command: ["mongosh", "--eval", "db.adminCommand('ping')"]
+            initialDelaySeconds: 10
+            periodSeconds: 10
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ReadWriteOnce]
+        {{- if .Values.mongodb.storageClass }}
+        storageClassName: {{ .Values.mongodb.storageClass }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.mongodb.storage }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "wled-controller.fullname" . }}-mongo
+  labels:
+    {{- include "wled-controller.labels" . | nindent 4 }}
+spec:
+  clusterIP: None
+  selector:
+    app.kubernetes.io/name: {{ include "wled-controller.name" . }}-mongo
+    app.kubernetes.io/instance: {{ .Release.Name }}
+  ports:
+    - port: 27017
+      name: mongo
+{{- end }}

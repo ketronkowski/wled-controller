@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ include "wled-controller.fullname" . }}-discovery
+  labels:
+    {{- include "wled-controller.labels" . | nindent 4 }}
+    {{- include "wled-controller.discoverySelectorLabels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "wled-controller.discoverySelectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "wled-controller.discoverySelectorLabels" . | nindent 8 }}
+    spec:
+      # hostNetwork required for mDNS multicast (link-local 224.0.0.251:5353)
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+        - name: discovery
+          image: "{{ .Values.discovery.image.repository }}:{{ .Values.discovery.image.tag }}"
+          imagePullPolicy: {{ .Values.discovery.image.pullPolicy }}
+          command:
+            - java
+            - -cp
+            - /app/app.jar
+            - -Dloader.main=com.wledcontroller.DiscoveryWorkerApplicationKt
+            - org.springframework.boot.loader.launch.PropertiesLauncher
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: discovery
+            - name: BACKEND_CALLBACK_URL
+              value: http://{{ include "wled-controller.fullname" . }}-backend:8080
+            - name: SPRING_DATA_MONGODB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.mongoSecret }}
+                  key: uri
+          resources:
+            {{- toYaml .Values.discovery.resources | nindent 12 }}

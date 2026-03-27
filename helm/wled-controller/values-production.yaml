@@ -1,0 +1,28 @@
+backend:
+  image:
+    tag: "latest"
+  resources:
+    requests:
+      cpu: 500m
+      memory: 768Mi
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+
+frontend:
+  image:
+    tag: "latest"
+
+discovery:
+  image:
+    tag: "latest"
+
+mongodb:
+  enabled: false   # Use external Atlas/ops-managed MongoDB in production
+
+ingress:
+  host: wled.ketronkowski.com
+  tls:
+    - secretName: wled-tls
+      hosts:
+        - wled.ketronkowski.com

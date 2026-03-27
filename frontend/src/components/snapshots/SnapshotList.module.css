@@ -1,0 +1,120 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.captureBtn {
+  padding: 6px 14px;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.captureBtn:hover {
+  opacity: 0.85;
+}
+
+.empty {
+  color: var(--text-muted);
+  font-size: 13px;
+  text-align: center;
+  padding: 24px 0;
+}
+
+.card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  cursor: default;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.cardName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.cardActions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.restoreBtn {
+  padding: 4px 10px;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.restoreBtn:hover {
+  opacity: 0.85;
+}
+
+.deleteBtn {
+  padding: 4px 8px;
+  border-radius: var(--radius);
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.deleteBtn:hover {
+  border-color: #e53e3e;
+  color: #e53e3e;
+}
+
+.cardMeta {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.cardDesc {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.tags {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-muted);
+}

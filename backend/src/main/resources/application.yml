@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: wled-controller
+  threads:
+    virtual:
+      enabled: true
+  data:
+    mongodb:
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/wled}
+  jackson:
+    default-property-inclusion: non_null
+    deserialization:
+      fail-on-unknown-properties: false
+
+server:
+  port: ${SERVER_PORT:8080}
+
+wled:
+  discovery:
+    timeout-ms: ${WLED_DISCOVERY_TIMEOUT_MS:10000}
+    udp-port: ${WLED_UDP_PORT:21324}
+  http:
+    connect-timeout-ms: ${WLED_HTTP_CONNECT_TIMEOUT_MS:3000}
+    read-timeout-ms: ${WLED_HTTP_READ_TIMEOUT_MS:5000}
+
+logging:
+  level:
+    com.wledcontroller: ${LOG_LEVEL:INFO}

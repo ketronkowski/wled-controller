@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: wled-controller
+  namespace: argocd
+spec:
+  description: WLED LED controller management platform
+  sourceRepos:
+    - https://github.com/ketronkowski/wled-controller.git
+  destinations:
+    - namespace: wled
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace

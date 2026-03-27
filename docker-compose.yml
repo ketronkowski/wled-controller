@@ -1,0 +1,67 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/wled
+      SERVER_PORT: "8080"
+      SPRING_THREADS_VIRTUAL_ENABLED: "true"
+    networks:
+      - internal
+    ports:
+      - "8080:8080"
+    depends_on:
+      mongo:
+        condition: service_healthy
+    restart: unless-stopped
+
+  discovery:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    command:
+      - java
+      - -cp
+      - /app/app.jar
+      - -Dloader.main=com.wledcontroller.DiscoveryWorkerApplicationKt
+      - org.springframework.boot.loader.launch.PropertiesLauncher
+    network_mode: host
+    environment:
+      BACKEND_CALLBACK_URL: http://localhost:8080
+      SPRING_PROFILES_ACTIVE: discovery
+      SPRING_DATA_MONGODB_URI: mongodb://localhost:27017/wled
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:80"
+    networks:
+      - internal
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:7.0
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+networks:
+  internal:
+
+volumes:
+  mongo-data:

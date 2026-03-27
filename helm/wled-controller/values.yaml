@@ -1,0 +1,62 @@
+replicaCount: 1
+
+backend:
+  image:
+    repository: ghcr.io/ketronkowski/wled-backend
+    tag: "1.0.0-SNAPSHOT"
+    pullPolicy: IfNotPresent
+  service:
+    port: 8080
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+  env:
+    SPRING_THREADS_VIRTUAL_ENABLED: "true"
+
+frontend:
+  image:
+    repository: ghcr.io/ketronkowski/wled-frontend
+    tag: "1.0.0-SNAPSHOT"
+    pullPolicy: IfNotPresent
+  service:
+    port: 80
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+
+discovery:
+  image:
+    repository: ghcr.io/ketronkowski/wled-backend
+    tag: "1.0.0-SNAPSHOT"
+    pullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+mongodb:
+  # Set to false to use an external MongoDB (provide uri in secret)
+  enabled: true
+  image: mongo:7.0
+  storage: 10Gi
+  storageClass: ""
+
+ingress:
+  enabled: true
+  className: nginx
+  host: wled.local
+  tls: []
+
+# Name of the Kubernetes secret containing SPRING_DATA_MONGODB_URI
+mongoSecret: wled-mongo-secret

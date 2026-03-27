@@ -1,0 +1,6 @@
+apiVersion: v2
+name: wled-controller
+description: Centralized management UI for WLED LED controllers
+type: application
+version: 0.1.0
+appVersion: "1.0.0-SNAPSHOT"

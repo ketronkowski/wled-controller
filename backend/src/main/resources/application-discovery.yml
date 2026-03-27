@@ -1,0 +1,14 @@
+spring:
+  data:
+    mongodb:
+      auto-index-creation: false
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration
+      - org.springframework.boot.autoconfigure.web.embedded.EmbeddedWebServerFactoryCustomizerAutoConfiguration
+
+server:
+  port: ${DISCOVERY_PORT:8081}
+
+discovery:
+  backend-callback-url: ${BACKEND_CALLBACK_URL:http://localhost:8080}

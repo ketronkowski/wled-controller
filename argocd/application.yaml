@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: wled-controller
+  namespace: argocd
+spec:
+  project: wled-controller
+  source:
+    repoURL: https://github.com/ketronkowski/wled-controller.git
+    targetRevision: HEAD
+    path: helm/wled-controller
+    helm:
+      valueFiles:
+        - values.yaml
+        - values-production.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: wled
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

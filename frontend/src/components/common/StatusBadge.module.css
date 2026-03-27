@@ -1,0 +1,28 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.online {
+  color: var(--online);
+  background: rgba(76, 175, 80, 0.12);
+}
+
+.offline {
+  color: var(--offline);
+  background: rgba(244, 67, 54, 0.12);
+}
