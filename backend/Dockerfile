@@ -1,16 +1,16 @@
-FROM eclipse-temurin:21-jdk-alpine AS build
+# Build stage always runs on the native builder platform (amd64 in CI)
+# so Gradle never runs under slow QEMU emulation.
+# Only the final runtime stage picks the target platform (arm64 for Pi).
+FROM --platform=$BUILDPLATFORM eclipse-temurin:21-jdk-alpine AS build
 WORKDIR /workspace
 
-# Cache Gradle wrapper and root build files
 COPY gradlew gradlew.bat settings.gradle.kts build.gradle.kts ./
 COPY gradle ./gradle
 COPY backend/build.gradle.kts ./backend/build.gradle.kts
 
-# Warm up the dependency cache
 RUN mkdir -p backend/src/main/kotlin && \
     ./gradlew :backend:dependencies --no-daemon -q 2>/dev/null || true
 
-# Build
 COPY backend/src ./backend/src
 RUN ./gradlew :backend:bootJar --no-daemon -x test
 
