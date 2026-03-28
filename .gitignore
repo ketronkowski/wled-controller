@@ -4,8 +4,6 @@ build/
 **/build/
 !src/**/build/
 gradle-app.setting
-!gradle-wrapper.jar
-!gradle-wrapper.properties
 .gradletasknamecache
 
 # IntelliJ IDEA
@@ -43,6 +41,8 @@ Thumbs.db
 *.jar
 *.war
 *.ear
+# Gradle wrapper jar must be committed for CI
+!gradle/wrapper/gradle-wrapper.jar
 hs_err_pid*
 
 # Logs
