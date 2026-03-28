@@ -7,6 +7,9 @@ WORKDIR /workspace
 COPY gradlew gradlew.bat settings.gradle.kts build.gradle.kts ./
 COPY gradle ./gradle
 COPY backend/build.gradle.kts ./backend/build.gradle.kts
+# frontend dir must exist so Gradle can configure the :frontend subproject
+# (settings.gradle.kts includes "frontend"), even though we don't build it here
+COPY frontend/build.gradle.kts ./frontend/build.gradle.kts
 
 RUN mkdir -p backend/src/main/kotlin && \
     ./gradlew :backend:dependencies --no-daemon -q 2>/dev/null || true
