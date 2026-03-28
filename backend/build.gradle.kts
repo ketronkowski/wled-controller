@@ -39,6 +39,10 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
+    mainClass.set("com.wledcontroller.WledControllerApplicationKt")
+}
+
 tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
     builder = "paketobuildpacks/builder-jammy-base:latest"
     imageName = "ghcr.io/ketronkowski/wled-backend:${project.version}"
