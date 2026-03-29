@@ -49,7 +49,8 @@ export function SubnetSettingsPanel() {
         <p className={styles.hint}>
           Subnets listed here are scanned for WLED devices. The discovery worker
           creates one mDNS listener per subnet interface and performs an active
-          HTTP scan of each /24 range. Leave empty to discover on all interfaces.
+          HTTP scan of each configured range (/16–/30 supported). Leave empty to
+          discover on all interfaces.
         </p>
       </div>
 

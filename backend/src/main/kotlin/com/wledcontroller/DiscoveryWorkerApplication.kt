@@ -131,19 +131,40 @@ class DiscoveryWorkerApplication {
     }
 
     private fun scanConfiguredSubnets(wledService: WledService, restClient: RestClient) {
-        val cidrs = activeCidrs.get().filter { it.endsWith("/24") }
+        val cidrs = activeCidrs.get()
         if (cidrs.isEmpty()) return
         val executor = Executors.newVirtualThreadPerTaskExecutor()
         for (cidr in cidrs) {
-            val network = cidr.substringBefore("/24")
-            val prefix = network.substringBeforeLast(".")
-            log.info("Active HTTP scan of $cidr")
-            for (host in 1..254) {
-                val ip = "$prefix.$host"
+            val hosts = cidrHostAddresses(cidr)
+            if (hosts.isEmpty()) {
+                log.warn("Skipping active scan of $cidr — prefix too short (min /16) or no usable hosts")
+                continue
+            }
+            log.info("Active HTTP scan of $cidr (${hosts.size} hosts)")
+            for (ip in hosts) {
                 executor.submit { probeAndReport(ip, wledService, restClient) }
             }
         }
     }
+
+    private fun cidrHostAddresses(cidr: String): List<String> = runCatching {
+        val (addrStr, prefixStr) = cidr.split("/")
+        val prefix = prefixStr.toInt()
+        if (prefix < 16 || prefix > 30) return emptyList() // /0–/15 too large; /31+/32 no usable hosts
+        val bytes = InetAddress.getByName(addrStr).address
+        if (bytes.size != 4) return emptyList()
+        val networkInt = ((bytes[0].toInt() and 0xFF) shl 24) or
+            ((bytes[1].toInt() and 0xFF) shl 16) or
+            ((bytes[2].toInt() and 0xFF) shl 8) or
+            (bytes[3].toInt() and 0xFF)
+        val mask = (-1).shl(32 - prefix)
+        val firstHost = (networkInt and mask) + 1
+        val lastHost = (networkInt or mask.inv()) - 1
+        if (lastHost < firstHost) return emptyList()
+        (firstHost..lastHost).map { ip ->
+            "${(ip shr 24) and 0xFF}.${(ip shr 16) and 0xFF}.${(ip shr 8) and 0xFF}.${ip and 0xFF}"
+        }
+    }.getOrDefault(emptyList())
 
     private fun fetchSubnets(restClient: RestClient): List<String> {
         repeat(5) { attempt ->

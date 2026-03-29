@@ -15,18 +15,20 @@ class SubnetService(private val subnetRepository: SubnetRepository) {
     fun findEnabled(): List<Subnet> = subnetRepository.findByEnabled(true)
 
     fun create(name: String, cidr: String, enabled: Boolean = true): Subnet {
-        validateCidr(cidr)
-        return subnetRepository.save(Subnet(name = name, cidr = cidr, enabled = enabled))
+        val normalized = normalizeCidr(cidr)
+        validateCidr(normalized)
+        return subnetRepository.save(Subnet(name = name, cidr = normalized, enabled = enabled))
     }
 
     fun update(id: ObjectId, name: String?, cidr: String?, enabled: Boolean?): Subnet {
         val existing = subnetRepository.findById(id)
             .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND, "Subnet $id not found") }
-        if (cidr != null) validateCidr(cidr)
+        val normalizedCidr = cidr?.let { normalizeCidr(it) }
+        if (normalizedCidr != null) validateCidr(normalizedCidr)
         return subnetRepository.save(
             existing.copy(
                 name = name ?: existing.name,
-                cidr = cidr ?: existing.cidr,
+                cidr = normalizedCidr ?: existing.cidr,
                 enabled = enabled ?: existing.enabled,
             )
         )
@@ -37,6 +39,22 @@ class SubnetService(private val subnetRepository: SubnetRepository) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, "Subnet $id not found")
         }
         subnetRepository.deleteById(id)
+    }
+
+    // Expand shorthand notation: "192.168.5/24" → "192.168.5.0/24"
+    private fun normalizeCidr(cidr: String): String {
+        val slash = cidr.indexOf('/')
+        if (slash < 0) return cidr
+        val addr = cidr.substring(0, slash)
+        val suffix = cidr.substring(slash)
+        val octets = addr.split(".")
+        return when (octets.size) {
+            4 -> cidr
+            3 -> "${octets[0]}.${octets[1]}.${octets[2]}.0$suffix"
+            2 -> "${octets[0]}.${octets[1]}.0.0$suffix"
+            1 -> "${octets[0]}.0.0.0$suffix"
+            else -> cidr
+        }
     }
 
     private fun validateCidr(cidr: String) {
