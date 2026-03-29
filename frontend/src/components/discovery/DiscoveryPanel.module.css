@@ -18,6 +18,21 @@
   letter-spacing: 0.5px;
 }
 
+.subnetSelect {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-primary);
+  padding: 7px 10px;
+  font-size: 13px;
+  width: 100%;
+}
+
+.subnetSelect:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
 .hint {
   font-size: 12px;
   color: var(--text-muted);

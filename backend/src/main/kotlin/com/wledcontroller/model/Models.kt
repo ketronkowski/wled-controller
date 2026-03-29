@@ -70,6 +70,26 @@ data class Subnet(
     val createdAt: Instant = Instant.now(),
 )
 
+/** Returns all usable host IPs in a CIDR. Returns empty for prefixes outside /16–/30. */
+fun cidrHostAddresses(cidr: String): List<String> = runCatching {
+    val (addrStr, prefixStr) = cidr.split("/")
+    val prefix = prefixStr.toInt()
+    if (prefix < 16 || prefix > 30) return emptyList()
+    val bytes = InetAddress.getByName(addrStr).address
+    if (bytes.size != 4) return emptyList()
+    val networkInt = ((bytes[0].toInt() and 0xFF) shl 24) or
+        ((bytes[1].toInt() and 0xFF) shl 16) or
+        ((bytes[2].toInt() and 0xFF) shl 8) or
+        (bytes[3].toInt() and 0xFF)
+    val mask = (-1).shl(32 - prefix)
+    val firstHost = (networkInt and mask) + 1
+    val lastHost = (networkInt or mask.inv()) - 1
+    if (lastHost < firstHost) return emptyList()
+    (firstHost..lastHost).map { ip ->
+        "${(ip shr 24) and 0xFF}.${(ip shr 16) and 0xFF}.${(ip shr 8) and 0xFF}.${ip and 0xFF}"
+    }
+}.getOrDefault(emptyList())
+
 fun cidrContains(cidr: String, ip: String): Boolean = runCatching {
     val (networkStr, prefixStr) = cidr.split("/")
     val prefix = prefixStr.toInt()

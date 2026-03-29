@@ -2,6 +2,7 @@ package com.wledcontroller
 
 import com.wledcontroller.dto.DiscoveredDevice
 import com.wledcontroller.model.cidrContains
+import com.wledcontroller.model.cidrHostAddresses
 import com.wledcontroller.service.WledService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -146,25 +147,6 @@ class DiscoveryWorkerApplication {
             }
         }
     }
-
-    private fun cidrHostAddresses(cidr: String): List<String> = runCatching {
-        val (addrStr, prefixStr) = cidr.split("/")
-        val prefix = prefixStr.toInt()
-        if (prefix < 16 || prefix > 30) return emptyList() // /0–/15 too large; /31+/32 no usable hosts
-        val bytes = InetAddress.getByName(addrStr).address
-        if (bytes.size != 4) return emptyList()
-        val networkInt = ((bytes[0].toInt() and 0xFF) shl 24) or
-            ((bytes[1].toInt() and 0xFF) shl 16) or
-            ((bytes[2].toInt() and 0xFF) shl 8) or
-            (bytes[3].toInt() and 0xFF)
-        val mask = (-1).shl(32 - prefix)
-        val firstHost = (networkInt and mask) + 1
-        val lastHost = (networkInt or mask.inv()) - 1
-        if (lastHost < firstHost) return emptyList()
-        (firstHost..lastHost).map { ip ->
-            "${(ip shr 24) and 0xFF}.${(ip shr 16) and 0xFF}.${(ip shr 8) and 0xFF}.${ip and 0xFF}"
-        }
-    }.getOrDefault(emptyList())
 
     private fun fetchSubnets(restClient: RestClient): List<String> {
         repeat(5) { attempt ->

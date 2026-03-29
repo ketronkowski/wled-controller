@@ -14,10 +14,12 @@ class DiscoveryController(
     private val controllerService: ControllerService,
 ) {
 
+    data class ScanRequest(val cidr: String? = null)
+
     @PostMapping("/scan")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun scan(): Map<String, String> {
-        discoveryService.scan()
+    fun scan(@RequestBody(required = false) req: ScanRequest?): Map<String, String> {
+        discoveryService.scan(cidr = req?.cidr)
         return mapOf("status" to "scan started")
     }
 

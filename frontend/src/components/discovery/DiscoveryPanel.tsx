@@ -2,12 +2,19 @@ import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { discoveryApi } from '../../api/discovery'
 import { controllersApi } from '../../api/controllers'
+import { subnetsApi } from '../../api/subnets'
 import type { DiscoveredDevice } from '../../types/wled'
 import styles from './DiscoveryPanel.module.css'
 
 export function DiscoveryPanel() {
   const qc = useQueryClient()
   const [manualIp, setManualIp] = useState('')
+  const [selectedCidr, setSelectedCidr] = useState<string>('')
+
+  const { data: subnets = [] } = useQuery({
+    queryKey: ['subnets'],
+    queryFn: subnetsApi.list,
+  })
 
   const { data: status, refetch: refetchStatus } = useQuery({
     queryKey: ['discovery-status'],
@@ -22,7 +29,7 @@ export function DiscoveryPanel() {
   })
 
   const scan = useMutation({
-    mutationFn: discoveryApi.scan,
+    mutationFn: () => discoveryApi.scan(selectedCidr || undefined),
     onSuccess: () => {
       setTimeout(() => refetchStatus(), 500)
     },
@@ -41,17 +48,41 @@ export function DiscoveryPanel() {
     },
   })
 
+  const selectedSubnet = subnets.find(s => s.cidr === selectedCidr)
+  const hint = selectedCidr
+    ? `Actively probes every host in ${selectedCidr}.`
+    : 'Scans the local subnet via mDNS and UDP broadcast.'
+
   return (
     <div className={styles.panel}>
       <div className={styles.section}>
         <h3 className={styles.sectionTitle}>Auto-Discover</h3>
-        <p className={styles.hint}>Scans the local subnet via mDNS and UDP broadcast.</p>
+
+        {subnets.length > 0 && (
+          <select
+            className={styles.subnetSelect}
+            value={selectedCidr}
+            onChange={e => setSelectedCidr(e.target.value)}
+          >
+            <option value="">All interfaces (mDNS/UDP)</option>
+            {subnets.map(s => (
+              <option key={s.id} value={s.cidr}>
+                {s.name} — {s.cidr}
+              </option>
+            ))}
+          </select>
+        )}
+
+        <p className={styles.hint}>{hint}</p>
+
         <button
           className={styles.scanBtn}
           onClick={() => scan.mutate()}
           disabled={status?.scanning || scan.isPending}
         >
-          {status?.scanning ? '🔍 Scanning...' : 'Start Scan'}
+          {status?.scanning
+            ? `🔍 Scanning${selectedSubnet ? ` ${selectedSubnet.name}` : ''}...`
+            : 'Start Scan'}
         </button>
       </div>
 

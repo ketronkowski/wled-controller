@@ -1,13 +1,13 @@
 package com.wledcontroller.service
 
 import com.wledcontroller.dto.DiscoveredDevice
+import com.wledcontroller.model.cidrHostAddresses
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.jmdns.JmDNS
 import javax.jmdns.ServiceEvent
@@ -24,7 +24,7 @@ class DiscoveryService(
     fun isScanning() = scanning.get()
     fun getLastResults(): List<DiscoveredDevice> = lastResults.values.toList()
 
-    fun scan(timeoutMs: Long = 10_000) {
+    fun scan(cidr: String? = null, timeoutMs: Long = 10_000) {
         if (!scanning.compareAndSet(false, true)) {
             log.info("Scan already in progress")
             return
@@ -34,12 +34,28 @@ class DiscoveryService(
         val executor = Executors.newVirtualThreadPerTaskExecutor()
         executor.submit {
             try {
-                runMdnsScan(timeoutMs)
-                runUdpScan(timeoutMs)
+                if (cidr != null) runActiveScan(cidr)
+                else {
+                    runMdnsScan(timeoutMs)
+                    runUdpScan(timeoutMs)
+                }
             } finally {
                 scanning.set(false)
             }
         }
+        executor.shutdown()
+    }
+
+    private fun runActiveScan(cidr: String) {
+        val hosts = cidrHostAddresses(cidr)
+        if (hosts.isEmpty()) {
+            log.warn("Active scan of $cidr skipped — prefix must be /16–/30")
+            return
+        }
+        log.info("Active HTTP scan of $cidr (${hosts.size} hosts)")
+        val executor = Executors.newVirtualThreadPerTaskExecutor()
+        val futures = hosts.map { ip -> executor.submit { probeDevice(ip) } }
+        futures.forEach { runCatching { it.get() } }
         executor.shutdown()
     }
 
