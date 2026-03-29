@@ -3,7 +3,7 @@ package com.wledcontroller.config
 import tools.jackson.core.JsonGenerator
 import tools.jackson.core.JsonParser
 import tools.jackson.databind.DeserializationContext
-import tools.jackson.databind.SerializerProvider
+import tools.jackson.databind.SerializationContext
 import tools.jackson.databind.deser.std.StdDeserializer
 import tools.jackson.databind.module.SimpleModule
 import tools.jackson.databind.ser.std.StdSerializer
@@ -33,7 +33,7 @@ class AppConfig {
     @Bean
     fun objectIdModule(): SimpleModule = SimpleModule("ObjectIdModule").apply {
         addSerializer(ObjectId::class.java, object : StdSerializer<ObjectId>(ObjectId::class.java) {
-            override fun serialize(value: ObjectId, gen: JsonGenerator, provider: SerializerProvider) =
+            override fun serialize(value: ObjectId, gen: JsonGenerator, ctxt: SerializationContext) =
                 gen.writeString(value.toHexString())
         })
         addDeserializer(ObjectId::class.java, object : StdDeserializer<ObjectId>(ObjectId::class.java) {
