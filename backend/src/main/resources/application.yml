@@ -4,13 +4,13 @@ spring:
   threads:
     virtual:
       enabled: true
-  data:
-    mongodb:
-      uri: ${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/wled}
+  mongodb:
+    uri: ${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/wled}
   jackson:
     default-property-inclusion: non_null
-    deserialization:
-      fail-on-unknown-properties: false
+    json:
+      read:
+        fail-on-unknown-properties: false
 
 server:
   port: ${SERVER_PORT:8080}

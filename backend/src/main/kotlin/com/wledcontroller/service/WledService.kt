@@ -1,6 +1,6 @@
 package com.wledcontroller.service
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import tools.jackson.databind.ObjectMapper
 import com.wledcontroller.dto.*
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
