@@ -3,10 +3,11 @@ import { Sidebar } from './Sidebar'
 import { ControllerDetail } from '../controllers/ControllerDetail'
 import { GroupDetail } from '../groups/GroupDetail'
 import { DiscoveryPanel } from '../discovery/DiscoveryPanel'
+import { SubnetSettingsPanel } from '../subnets/SubnetSettingsPanel'
 import styles from './AppShell.module.css'
 
 export function AppShell() {
-  const { selection, discoveryOpen, setDiscoveryOpen } = useUiStore()
+  const { selection, discoveryOpen, setDiscoveryOpen, settingsOpen, setSettingsOpen } = useUiStore()
 
   return (
     <div className={styles.shell}>
@@ -17,7 +18,13 @@ export function AppShell() {
         </div>
         <div className={styles.headerActions}>
           <button
-            className={styles.headerBtn}
+            className={`${styles.headerBtn} ${settingsOpen ? styles.active : ''}`}
+            onClick={() => setSettingsOpen(!settingsOpen)}
+          >
+            ⚙ Subnets
+          </button>
+          <button
+            className={`${styles.headerBtn} ${discoveryOpen ? styles.active : ''}`}
             onClick={() => setDiscoveryOpen(!discoveryOpen)}
           >
             {discoveryOpen ? '✕ Close' : '🔍 Discover'}
@@ -29,7 +36,12 @@ export function AppShell() {
         <Sidebar />
 
         <main className={styles.main}>
-          {discoveryOpen ? (
+          {settingsOpen ? (
+            <div className={styles.panelWrapper}>
+              <h2 className={styles.panelTitle}>Subnet Settings</h2>
+              <SubnetSettingsPanel />
+            </div>
+          ) : discoveryOpen ? (
             <div className={styles.panelWrapper}>
               <h2 className={styles.panelTitle}>Discover Devices</h2>
               <DiscoveryPanel />

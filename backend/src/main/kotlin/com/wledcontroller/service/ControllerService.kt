@@ -3,7 +3,9 @@ package com.wledcontroller.service
 import com.wledcontroller.dto.ControlPayload
 import com.wledcontroller.dto.DiscoveredDevice
 import com.wledcontroller.model.Controller
+import com.wledcontroller.model.cidrContains
 import com.wledcontroller.repository.ControllerRepository
+import com.wledcontroller.repository.SubnetRepository
 import org.bson.types.ObjectId
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -14,6 +16,7 @@ import java.time.Instant
 @Service
 class ControllerService(
     private val controllerRepository: ControllerRepository,
+    private val subnetRepository: SubnetRepository,
     private val wledService: WledService,
 ) {
     private val log = LoggerFactory.getLogger(ControllerService::class.java)
@@ -35,7 +38,7 @@ class ControllerService(
             ip = ip,
             name = info.name.ifBlank { "WLED-${info.mac.takeLast(6)}" },
             mac = info.mac,
-            subnet = computeSubnet(ip),
+            subnet = resolveSubnet(ip),
             firmware = info.ver,
             ledCount = info.leds.count,
             addedManually = true,
@@ -52,13 +55,19 @@ class ControllerService(
                     ip = device.ip,
                     name = device.name,
                     mac = device.mac,
-                    subnet = computeSubnet(device.ip),
+                    subnet = resolveSubnet(device.ip),
                     firmware = device.firmware,
                     ledCount = device.ledCount,
                     online = true,
                 )
             )
         }
+    }
+
+    private fun resolveSubnet(ip: String): String {
+        val configured = subnetRepository.findByEnabled(true)
+        return configured.firstOrNull { cidrContains(it.cidr, ip) }?.cidr
+            ?: computeSubnet(ip)
     }
 
     fun refreshState(id: ObjectId): Controller {

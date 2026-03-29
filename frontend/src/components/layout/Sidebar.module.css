@@ -89,3 +89,54 @@
   font-size: 11px;
   color: var(--text-muted);
 }
+
+.subnetPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 4px 0 6px;
+}
+
+.pill {
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  transition: all var(--transition);
+  cursor: pointer;
+}
+
+.pill:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.pillActive {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.subnetHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 10px 4px 4px;
+  margin-top: 4px;
+  border-top: 1px solid var(--border);
+}
+
+.subnetLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.subnetCidr {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-family: monospace;
+}

@@ -135,6 +135,14 @@ export interface LiveState {
   palettes: string[]
 }
 
+export interface Subnet {
+  id: string
+  name: string
+  cidr: string
+  enabled: boolean
+  createdAt: string
+}
+
 export interface GroupControlResult {
   succeeded: Array<{ controllerId: string; ip: string }>
   failed: Array<{ controllerId: string; ip: string; reason: string }>

@@ -6,6 +6,7 @@ import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
+import java.net.InetAddress
 import java.time.Instant
 
 @Document(collection = "controllers")
@@ -59,6 +60,31 @@ data class SnapshotControllerData(
     val config: Map<String, Any?> = emptyMap(),
     val presets: Map<String, Any?> = emptyMap(),
 )
+
+@Document(collection = "subnets")
+data class Subnet(
+    @Id val id: ObjectId = ObjectId(),
+    val name: String,
+    val cidr: String,
+    val enabled: Boolean = true,
+    val createdAt: Instant = Instant.now(),
+)
+
+fun cidrContains(cidr: String, ip: String): Boolean = runCatching {
+    val (networkStr, prefixStr) = cidr.split("/")
+    val prefix = prefixStr.toInt()
+    val networkBytes = InetAddress.getByName(networkStr).address
+    val ipBytes = InetAddress.getByName(ip).address
+    if (networkBytes.size != ipBytes.size) return false
+    var bitsLeft = prefix
+    for (i in networkBytes.indices) {
+        if (bitsLeft <= 0) break
+        val mask = if (bitsLeft >= 8) 0xFF.toByte() else (0xFF shl (8 - bitsLeft)).toByte()
+        if ((networkBytes[i].toInt() and mask.toInt()) != (ipBytes[i].toInt() and mask.toInt())) return false
+        bitsLeft -= 8
+    }
+    true
+}.getOrDefault(false)
 
 @Document(collection = "snapshots")
 data class Snapshot(

@@ -52,6 +52,12 @@
   color: var(--accent);
 }
 
+.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(255, 102, 0, 0.1);
+}
+
 .body {
   flex: 1;
   display: flex;

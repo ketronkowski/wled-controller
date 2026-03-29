@@ -3,6 +3,7 @@ package com.wledcontroller.repository
 import com.wledcontroller.model.Controller
 import com.wledcontroller.model.Group
 import com.wledcontroller.model.Snapshot
+import com.wledcontroller.model.Subnet
 import org.bson.types.ObjectId
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
@@ -23,4 +24,9 @@ interface GroupRepository : MongoRepository<Group, ObjectId> {
 @Repository
 interface SnapshotRepository : MongoRepository<Snapshot, ObjectId> {
     fun findByScopeTypeAndScopeId(type: String, id: ObjectId): List<Snapshot>
+}
+
+@Repository
+interface SubnetRepository : MongoRepository<Subnet, ObjectId> {
+    fun findByEnabled(enabled: Boolean): List<Subnet>
 }
