@@ -33,8 +33,9 @@ class AppConfig {
     @Bean
     fun objectIdModule(): SimpleModule = SimpleModule("ObjectIdModule").apply {
         addSerializer(ObjectId::class.java, object : StdSerializer<ObjectId>(ObjectId::class.java) {
-            override fun serialize(value: ObjectId, gen: JsonGenerator, ctxt: SerializationContext) =
+            override fun serialize(value: ObjectId, gen: JsonGenerator, ctxt: SerializationContext) {
                 gen.writeString(value.toHexString())
+            }
         })
         addDeserializer(ObjectId::class.java, object : StdDeserializer<ObjectId>(ObjectId::class.java) {
             override fun deserialize(p: JsonParser, ctxt: DeserializationContext): ObjectId =
