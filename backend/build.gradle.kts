@@ -33,7 +33,7 @@ dependencies {
     implementation("org.jmdns:jmdns:3.6.1")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring40x:4.18.0")
+    testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring3x:4.20.0")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
 }
 
