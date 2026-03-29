@@ -34,6 +34,10 @@ class ControllerController(private val controllerService: ControllerService) {
     fun liveState(@PathVariable id: String): Map<String, Any?> =
         controllerService.getLiveState(ObjectId(id))
 
+    @GetMapping("/{id}/fxdata")
+    fun fxData(@PathVariable id: String): List<String> =
+        controllerService.getFxData(ObjectId(id))
+
     @PostMapping("/{id}/refresh")
     fun refresh(@PathVariable id: String): Controller =
         controllerService.refreshState(ObjectId(id))

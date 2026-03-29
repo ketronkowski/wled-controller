@@ -7,5 +7,6 @@ export const controllersApi = {
   add: (ip: string) => apiClient.post<Controller>('/controllers', { ip }).then(r => r.data),
   delete: (id: string) => apiClient.delete(`/controllers/${id}`),
   liveState: (id: string) => apiClient.get<LiveState>(`/controllers/${id}/state`).then(r => r.data),
+  fxData: (id: string) => apiClient.get<string[]>(`/controllers/${id}/fxdata`).then(r => r.data),
   refresh: (id: string) => apiClient.post<Controller>(`/controllers/${id}/refresh`).then(r => r.data),
 }

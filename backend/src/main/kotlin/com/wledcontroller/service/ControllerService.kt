@@ -96,6 +96,11 @@ class ControllerService(
         )
     }
 
+    fun getFxData(id: ObjectId): List<String> {
+        val controller = findById(id)
+        return wledService.getFxData(controller.ip)
+    }
+
     fun applyCommand(id: ObjectId, payload: ControlPayload): Controller {
         val controller = findById(id)
         val patch = wledService.buildStatePatch(payload)

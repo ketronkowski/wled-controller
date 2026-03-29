@@ -26,6 +26,13 @@ export function ControllerDetail({ controllerId }: Props) {
     select: list => list.find(c => c.id === controllerId),
   })
 
+  const { data: fxData = [] } = useQuery({
+    queryKey: ['controller-fxdata', controllerId],
+    queryFn: () => controllersApi.fxData(controllerId),
+    staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+  })
+
   const sendCmd = useMutation({
     mutationFn: (payload: ControlPayload) => controlApi.sendToController(controllerId, payload),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['controller-state', controllerId] }),
@@ -51,7 +58,7 @@ export function ControllerDetail({ controllerId }: Props) {
       <ControlPanel
         state={liveState.state}
         effects={liveState.effects}
-        fxData={[]}
+        fxData={fxData}
         palettes={liveState.palettes}
         onCommand={sendCmd.mutate}
         sending={sendCmd.isPending}
