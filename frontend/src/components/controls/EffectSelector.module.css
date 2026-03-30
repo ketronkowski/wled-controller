@@ -87,3 +87,26 @@
   accent-color: var(--accent);
   width: auto;
 }
+
+.effectInfo {
+  margin-top: 4px;
+  padding: 10px 12px;
+  background: var(--bg-secondary);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+}
+
+.effectInfoLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.effectInfoText {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}

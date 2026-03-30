@@ -83,3 +83,19 @@
   font-family: monospace;
   font-size: 12px;
 }
+
+.editBtn {
+  padding: 6px 14px;
+  border-radius: var(--radius);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  font-size: 13px;
+  transition: all var(--transition);
+  align-self: flex-start;
+}
+
+.editBtn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}

@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import styles from './EffectSelector.module.css'
+import { WLED_EFFECT_DESCRIPTIONS } from '../../data/wledEffectDescriptions'
 
 interface Props {
   effects: string[]
@@ -53,6 +54,9 @@ export function EffectSelector({
   onChange,
 }: Props) {
   const [search, setSearch] = useState('')
+
+  const selectedEffectName = effects[selectedFx]
+  const description = selectedEffectName ? WLED_EFFECT_DESCRIPTIONS[selectedEffectName] : undefined
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase()
@@ -155,6 +159,13 @@ export function EffectSelector({
           ))}
         </div>
       </div>
+
+      {description && (
+        <div className={styles.effectInfo}>
+          <span className={styles.effectInfoLabel}>ℹ {selectedEffectName}</span>
+          <p className={styles.effectInfoText}>{description}</p>
+        </div>
+      )}
     </div>
   )
 }

@@ -36,17 +36,7 @@ export function AppShell() {
         <Sidebar />
 
         <main className={styles.main}>
-          {settingsOpen ? (
-            <div className={styles.panelWrapper}>
-              <h2 className={styles.panelTitle}>Subnet Settings</h2>
-              <SubnetSettingsPanel />
-            </div>
-          ) : discoveryOpen ? (
-            <div className={styles.panelWrapper}>
-              <h2 className={styles.panelTitle}>Discover Devices</h2>
-              <DiscoveryPanel />
-            </div>
-          ) : selection?.kind === 'controller' ? (
+          {selection?.kind === 'controller' ? (
             <div className={styles.panelWrapper}>
               <ControllerDetail controllerId={selection.id} />
             </div>
@@ -67,6 +57,30 @@ export function AppShell() {
             </div>
           )}
         </main>
+
+        {settingsOpen && (
+          <div className={styles.modalOverlay} onClick={e => e.target === e.currentTarget && setSettingsOpen(false)}>
+            <div className={styles.modalContent}>
+              <div className={styles.modalHeader}>
+                <h2 className={styles.modalTitle}>Subnet Settings</h2>
+                <button className={styles.modalClose} onClick={() => setSettingsOpen(false)}>✕</button>
+              </div>
+              <SubnetSettingsPanel />
+            </div>
+          </div>
+        )}
+
+        {discoveryOpen && (
+          <div className={styles.modalOverlay} onClick={e => e.target === e.currentTarget && setDiscoveryOpen(false)}>
+            <div className={styles.modalContent}>
+              <div className={styles.modalHeader}>
+                <h2 className={styles.modalTitle}>Discover Devices</h2>
+                <button className={styles.modalClose} onClick={() => setDiscoveryOpen(false)}>✕</button>
+              </div>
+              <DiscoveryPanel />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

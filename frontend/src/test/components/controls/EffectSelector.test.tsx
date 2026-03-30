@@ -86,4 +86,32 @@ describe('EffectSelector', () => {
     expect(screen.getByText('Speed')).toBeInTheDocument()
     expect(screen.getByText('Intensity')).toBeInTheDocument()
   })
+
+  it('shows description panel when selected effect has a known description', () => {
+    render(<EffectSelector {...defaultProps} effects={['Solid']} selectedFx={0} />)
+    expect(screen.getByText(/All LEDs display the primary color/)).toBeInTheDocument()
+  })
+
+  it('shows the effect name in the description panel label', () => {
+    render(<EffectSelector {...defaultProps} effects={['Solid']} selectedFx={0} />)
+    expect(screen.getByText(/ℹ Solid/)).toBeInTheDocument()
+  })
+
+  it('does not show description panel when selected effect is not in the descriptions map', () => {
+    render(<EffectSelector {...defaultProps} effects={['UnknownEffect999']} selectedFx={0} />)
+    expect(screen.queryByText(/ℹ/)).not.toBeInTheDocument()
+  })
+
+  it('description updates when selected effect changes', () => {
+    const { rerender } = render(
+      <EffectSelector {...defaultProps} effects={['Solid', 'Rainbow']} selectedFx={0} />
+    )
+    expect(screen.getByText(/All LEDs display the primary color/)).toBeInTheDocument()
+
+    rerender(
+      <EffectSelector {...defaultProps} effects={['Solid', 'Rainbow']} selectedFx={1} />
+    )
+    expect(screen.queryByText(/All LEDs display the primary color/)).not.toBeInTheDocument()
+    expect(screen.getByText(/Displays rainbow colors along the whole strip/)).toBeInTheDocument()
+  })
 })

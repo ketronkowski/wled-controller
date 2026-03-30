@@ -5,6 +5,7 @@ import { controllersApi } from '../../api/controllers'
 import type { ControlPayload, GroupControlResult } from '../../types/wled'
 import { ControlPanel } from '../controls/ControlPanel'
 import { SnapshotList } from '../snapshots/SnapshotList'
+import { GroupEditor } from './GroupEditor'
 import styles from './GroupDetail.module.css'
 import { useState } from 'react'
 
@@ -23,6 +24,7 @@ const EMPTY_STATE = {
 export function GroupDetail({ groupId }: Props) {
   const qc = useQueryClient()
   const [lastResult, setLastResult] = useState<GroupControlResult | null>(null)
+  const [editorOpen, setEditorOpen] = useState(false)
 
   const { data: group } = useQuery({
     queryKey: ['group', groupId],
@@ -46,6 +48,14 @@ export function GroupDetail({ groupId }: Props) {
     enabled: !!firstOnline,
   })
 
+  const { data: fxData = [] } = useQuery({
+    queryKey: ['controller-fxdata', firstOnline?.id],
+    queryFn: () => controllersApi.fxData(firstOnline!.id),
+    enabled: !!firstOnline,
+    staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+  })
+
   const sendCmd = useMutation({
     mutationFn: (payload: ControlPayload) => controlApi.sendToGroup(groupId, payload),
     onSuccess: result => {
@@ -64,6 +74,9 @@ export function GroupDetail({ groupId }: Props) {
             {group?.subnet && <span className={styles.subnet}>{group.subnet}</span>}
           </div>
         </div>
+        <button className={styles.editBtn} onClick={() => setEditorOpen(true)}>
+          Edit Group
+        </button>
       </div>
 
       {lastResult && lastResult.failed.length > 0 && (
@@ -76,7 +89,7 @@ export function GroupDetail({ groupId }: Props) {
       <ControlPanel
         state={liveState?.state ?? EMPTY_STATE}
         effects={liveState?.effects ?? []}
-        fxData={[]}
+        fxData={fxData}
         palettes={liveState?.palettes ?? []}
         onCommand={sendCmd.mutate}
         sending={sendCmd.isPending}
@@ -98,6 +111,10 @@ export function GroupDetail({ groupId }: Props) {
         scopeId={groupId}
         scopeName={group?.name ?? groupId}
       />
+
+      {editorOpen && group && (
+        <GroupEditor group={group} onClose={() => setEditorOpen(false)} />
+      )}
     </div>
   )
 }

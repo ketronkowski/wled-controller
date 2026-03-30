@@ -15,6 +15,7 @@ export function GroupEditor({ group, onClose, onCreated }: Props) {
   const qc = useQueryClient()
   const [name, setName] = useState(group?.name ?? '')
   const [description, setDescription] = useState(group?.description ?? '')
+  const [activeGroup, setActiveGroup] = useState<Group | undefined>(group)
 
   const { data: controllers } = useQuery({
     queryKey: ['controllers'],
@@ -36,28 +37,32 @@ export function GroupEditor({ group, onClose, onCreated }: Props) {
     onSuccess: g => {
       qc.invalidateQueries({ queryKey: ['groups'] })
       onCreated?.(g)
-      onClose()
+      if (!group) {
+        setActiveGroup(g)
+      } else {
+        onClose()
+      }
     },
   })
 
   const addMember = useMutation({
     mutationFn: ({ id, type }: { id: string; type: 'CONTROLLER' | 'GROUP' }) =>
-      groupsApi.addMember(group!.id, id, type),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['group', group?.id] }),
+      groupsApi.addMember(activeGroup!.id, id, type),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['group', activeGroup?.id] }),
   })
 
   const removeMember = useMutation({
-    mutationFn: (memberId: string) => groupsApi.removeMember(group!.id, memberId),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['group', group?.id] }),
+    mutationFn: (memberId: string) => groupsApi.removeMember(activeGroup!.id, memberId),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['group', activeGroup?.id] }),
   })
 
-  const currentMemberIds = new Set(group?.members.map(m => m.id) ?? [])
+  const currentMemberIds = new Set(activeGroup?.members.map(m => m.id) ?? [])
 
   return (
     <div className={styles.overlay} onClick={e => e.target === e.currentTarget && onClose()}>
       <div className={styles.modal}>
         <div className={styles.modalHeader}>
-          <h3>{group ? 'Edit Group' : 'Create Group'}</h3>
+          <h3>{activeGroup ? 'Edit Group' : 'Create Group'}</h3>
           <button className={styles.closeBtn} onClick={onClose}>✕</button>
         </div>
 
@@ -69,7 +74,7 @@ export function GroupEditor({ group, onClose, onCreated }: Props) {
           <input value={description} onChange={e => setDescription(e.target.value)} placeholder="Optional description" />
         </div>
 
-        {group && (
+        {activeGroup && (
           <div className={styles.members}>
             <h4 className={styles.sectionTitle}>Add Controllers</h4>
             <div className={styles.candidateList}>
@@ -92,10 +97,10 @@ export function GroupEditor({ group, onClose, onCreated }: Props) {
                 ))}
             </div>
 
-            {group.members.length > 0 && (
+            {activeGroup.members.length > 0 && (
               <>
                 <h4 className={styles.sectionTitle}>Current Members</h4>
-                {group.members.map(m => (
+                {activeGroup.members.map(m => (
                   <div key={m.id} className={styles.candidate}>
                     <span>{m.type === 'CONTROLLER'
                       ? controllers?.find(c => c.id === m.id)?.name ?? m.id
@@ -121,7 +126,7 @@ export function GroupEditor({ group, onClose, onCreated }: Props) {
             onClick={() => save.mutate()}
             disabled={!name.trim() || save.isPending}
           >
-            {save.isPending ? 'Saving...' : 'Save'}
+            {save.isPending ? 'Saving...' : (activeGroup ? 'Save' : 'Save & Continue')}
           </button>
         </div>
       </div>
