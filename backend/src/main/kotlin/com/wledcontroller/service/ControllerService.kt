@@ -88,11 +88,13 @@ class ControllerService(
         val controller = findById(id)
         val full = wledService.getFullState(controller.ip)
             ?: throw ResponseStatusException(HttpStatus.BAD_GATEWAY, "Cannot reach ${controller.ip}")
+        val effects = full.effects.ifEmpty { wledService.getEffects(controller.ip) }
+        val palettes = full.palettes.ifEmpty { wledService.getPalettes(controller.ip) }
         return mapOf(
             "state" to full.state,
             "info" to full.info,
-            "effects" to full.effects,
-            "palettes" to full.palettes,
+            "effects" to effects,
+            "palettes" to palettes,
         )
     }
 

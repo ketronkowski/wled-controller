@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 import styles from './EffectSelector.module.css'
 import { WLED_EFFECT_DESCRIPTIONS } from '../../data/wledEffectDescriptions'
+import { parseFxData } from '../../utils/parseFxData'
 
 interface Props {
   effects: string[]
@@ -27,22 +28,6 @@ interface Props {
   }) => void
 }
 
-function parseFxData(raw: string) {
-  // Format: "name;SliderLabel1,SliderLabel2;Custom1,Custom2,Custom3;opt1,opt2"
-  // Or just "name" for simple effects
-  const parts = raw.split(';')
-  return {
-    speed: parts[1]?.split(',')[0] || 'Speed',
-    intensity: parts[1]?.split(',')[1] || 'Intensity',
-    c1: parts[2]?.split(',')[0] || 'Custom 1',
-    c2: parts[2]?.split(',')[1] || 'Custom 2',
-    c3: parts[2]?.split(',')[2] || 'Custom 3',
-    o1: parts[3]?.split(',')[0] || 'Option 1',
-    o2: parts[3]?.split(',')[1] || 'Option 2',
-    o3: parts[3]?.split(',')[2] || 'Option 3',
-  }
-}
-
 export function EffectSelector({
   effects,
   fxData,
@@ -65,10 +50,7 @@ export function EffectSelector({
       .filter(({ name }) => name.toLowerCase().includes(q))
   }, [effects, search])
 
-  const params = useMemo(() => {
-    const raw = fxData[selectedFx] ?? ''
-    return parseFxData(raw)
-  }, [fxData, selectedFx])
+  const params = useMemo(() => parseFxData(fxData[selectedFx] ?? ''), [fxData, selectedFx])
 
   return (
     <div className={styles.wrapper}>
@@ -93,7 +75,7 @@ export function EffectSelector({
 
       <div className={styles.sliders}>
         <label className={styles.sliderRow}>
-          <span>{params.speed}</span>
+          <span>{params.speedLabel}</span>
           <input
             type="range" min={0} max={255} value={speed}
             onChange={e => onChange({ sx: +e.target.value })}
@@ -102,7 +84,7 @@ export function EffectSelector({
         </label>
 
         <label className={styles.sliderRow}>
-          <span>{params.intensity}</span>
+          <span>{params.intensityLabel}</span>
           <input
             type="range" min={0} max={255} value={intensity}
             onChange={e => onChange({ ix: +e.target.value })}
@@ -110,9 +92,9 @@ export function EffectSelector({
           <span className={styles.val}>{intensity}</span>
         </label>
 
-        {params.c1 && params.c1 !== '!' && (
+        {params.c1.show && (
           <label className={styles.sliderRow}>
-            <span>{params.c1}</span>
+            <span>{params.c1.label}</span>
             <input
               type="range" min={0} max={255} value={c1}
               onChange={e => onChange({ c1: +e.target.value })}
@@ -121,9 +103,9 @@ export function EffectSelector({
           </label>
         )}
 
-        {params.c2 && params.c2 !== '!' && (
+        {params.c2.show && (
           <label className={styles.sliderRow}>
-            <span>{params.c2}</span>
+            <span>{params.c2.label}</span>
             <input
               type="range" min={0} max={255} value={c2}
               onChange={e => onChange({ c2: +e.target.value })}
@@ -132,9 +114,9 @@ export function EffectSelector({
           </label>
         )}
 
-        {params.c3 && params.c3 !== '!' && (
+        {params.c3.show && (
           <label className={styles.sliderRow}>
-            <span>{params.c3}</span>
+            <span>{params.c3.label}</span>
             <input
               type="range" min={0} max={255} value={c3}
               onChange={e => onChange({ c3: +e.target.value })}
@@ -145,10 +127,10 @@ export function EffectSelector({
 
         <div className={styles.checkboxes}>
           {[
-            { label: params.o1, val: o1, key: 'o1' as const },
-            { label: params.o2, val: o2, key: 'o2' as const },
-            { label: params.o3, val: o3, key: 'o3' as const },
-          ].filter(x => x.label && x.label !== '!').map(({ label, val, key }) => (
+            { show: params.o1.show, label: params.o1.label, val: o1, key: 'o1' as const },
+            { show: params.o2.show, label: params.o2.label, val: o2, key: 'o2' as const },
+            { show: params.o3.show, label: params.o3.label, val: o3, key: 'o3' as const },
+          ].filter(x => x.show).map(({ label, val, key }) => (
             <label key={key} className={styles.checkbox}>
               <input
                 type="checkbox" checked={val}

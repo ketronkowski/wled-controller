@@ -73,12 +73,24 @@ describe('EffectSelector', () => {
     expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ sx: 200 }))
   })
 
-  it('uses fxdata labels when provided', () => {
-    // fxdata format: "name;SpeedLabel,IntensLabel;C1Label,C2Label,C3Label"
+  it('uses fxdata labels when provided (old format)', () => {
     const fxData = ['Solid', 'Blink;Rate,Duty;Hue,Sat,Val']
     render(<EffectSelector {...defaultProps} fxData={fxData} selectedFx={1} />)
     expect(screen.getByText('Rate')).toBeInTheDocument()
     expect(screen.getByText('Duty')).toBeInTheDocument()
+  })
+
+  it('uses fxdata labels when provided (new @ format)', () => {
+    const fxData = ['Solid@!;!;;!;1d', 'Blink@!,Duty cycle;!,!;!;01']
+    render(<EffectSelector {...defaultProps} fxData={fxData} selectedFx={1} />)
+    expect(screen.getByText('Speed')).toBeInTheDocument()
+    expect(screen.getByText('Duty cycle')).toBeInTheDocument()
+  })
+
+  it('does not render "!" as a slider label (new format)', () => {
+    const fxData = ['Blink@!,!;!,!;!;01']
+    render(<EffectSelector {...defaultProps} fxData={fxData} selectedFx={0} />)
+    expect(screen.queryByText('!')).not.toBeInTheDocument()
   })
 
   it('falls back to default Speed/Intensity labels when fxdata is empty', () => {

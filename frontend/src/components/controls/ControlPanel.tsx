@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import type { WledState } from '../../types/wled'
 import type { ControlPayload } from '../../types/wled'
 import { ColorPicker } from './ColorPicker'
 import { EffectSelector } from './EffectSelector'
 import { PaletteSelector } from './PaletteSelector'
+import { parseFxData } from '../../utils/parseFxData'
 import styles from './ControlPanel.module.css'
 
 type RGB = [number, number, number]
@@ -22,6 +23,7 @@ type Tab = 'colors' | 'effects' | 'palettes'
 export function ControlPanel({ state, effects, fxData, palettes, onCommand, sending }: Props) {
   const [tab, setTab] = useState<Tab>('colors')
   const seg = state.seg[state.mainseg] ?? state.seg[0]
+  const effectParsed = useMemo(() => parseFxData(fxData[seg?.fx ?? 0] ?? ''), [fxData, seg?.fx])
 
   if (!seg) return <div className={styles.empty}>No segment data</div>
 
@@ -69,6 +71,7 @@ export function ControlPanel({ state, effects, fxData, palettes, onCommand, send
         {tab === 'colors' && (
           <ColorPicker
             colors={colors}
+            colorSlots={effectParsed.colorSlots}
             onChange={cols => onCommand({ col: cols })}
           />
         )}

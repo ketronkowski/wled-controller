@@ -64,6 +64,14 @@ export function GroupDetail({ groupId }: Props) {
     },
   })
 
+  const removeMember = useMutation({
+    mutationFn: (controllerId: string) => groupsApi.removeMember(groupId, controllerId),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['group', groupId] })
+      qc.invalidateQueries({ queryKey: ['controllers'] })
+    },
+  })
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.header}>
@@ -102,6 +110,12 @@ export function GroupDetail({ groupId }: Props) {
             <span className={styles.dot} style={{ background: c.online ? 'var(--online)' : 'var(--offline)' }} />
             <span>{c.name}</span>
             <span className={styles.ip}>{c.ip}</span>
+            <button
+              className={styles.removeBtn}
+              onClick={() => removeMember.mutate(c.id)}
+              disabled={removeMember.isPending}
+              title="Remove from group"
+            >✕</button>
           </div>
         ))}
       </div>

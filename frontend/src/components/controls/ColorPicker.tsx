@@ -1,15 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
 import iro from '@jaames/iro'
+import type { ColorSlotConfig } from '../../utils/parseFxData'
 import styles from './ColorPicker.module.css'
 
 type RGB = [number, number, number]
 
 interface Props {
   colors: [RGB, RGB, RGB]
+  colorSlots: [ColorSlotConfig, ColorSlotConfig, ColorSlotConfig]
   onChange: (colors: [RGB, RGB, RGB]) => void
 }
 
-export function ColorPicker({ colors, onChange }: Props) {
+export function ColorPicker({ colors, colorSlots, onChange }: Props) {
   const [activeSlot, setActiveSlot] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
   const pickerRef = useRef<iro.ColorPicker | null>(null)
@@ -50,22 +52,21 @@ export function ColorPicker({ colors, onChange }: Props) {
     }
   }, [activeSlot, colors])
 
-  const slotLabels = ['Primary', 'Secondary', 'Tertiary']
-
   return (
     <div className={styles.wrapper}>
       <div className={styles.tabs}>
-        {slotLabels.map((label, i) => (
+        {colorSlots.map((slot, i) => (
           <button
             key={i}
-            className={`${styles.tab} ${activeSlot === i ? styles.active : ''}`}
+            className={`${styles.tab} ${activeSlot === i ? styles.active : ''} ${!slot.active ? styles.inactive : ''}`}
             onClick={() => setActiveSlot(i)}
+            title={!slot.active ? `${slot.label} color (not used by this effect)` : slot.label}
           >
             <span
               className={styles.swatch}
               style={{ background: `rgb(${colors[i].join(',')})` }}
             />
-            {label}
+            {slot.label}
           </button>
         ))}
       </div>

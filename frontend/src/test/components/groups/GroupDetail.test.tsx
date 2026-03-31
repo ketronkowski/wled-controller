@@ -114,6 +114,7 @@ describe('GroupDetail', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     mockGroupsApi.get.mockResolvedValue(FIXTURE_GROUP)
+    mockGroupsApi.removeMember.mockResolvedValue({ ...FIXTURE_GROUP, members: [] })
     mockControllersApi.list.mockResolvedValue(FIXTURE_CONTROLLERS)
     mockControllersApi.liveState.mockResolvedValue(FIXTURE_LIVE_STATE)
     mockControllersApi.fxData.mockResolvedValue(FIXTURE_FXDATA)
@@ -174,5 +175,23 @@ describe('GroupDetail', () => {
       const panel = screen.getByTestId('control-panel')
       expect(panel.getAttribute('data-fxdata-len')).toBe('0')
     })
+  })
+
+  it('renders a remove button for each member controller', async () => {
+    renderDetail()
+    await waitFor(() => {
+      const removeBtns = screen.getAllByRole('button', { name: '✕' })
+      expect(removeBtns).toHaveLength(FIXTURE_CONTROLLERS.length)
+    })
+  })
+
+  it('clicking remove button calls removeMember with correct controller id', async () => {
+    renderDetail()
+    await waitFor(() => screen.getAllByRole('button', { name: '✕' }))
+    const [firstRemove] = screen.getAllByRole('button', { name: '✕' })
+    await userEvent.click(firstRemove)
+    await waitFor(() =>
+      expect(mockGroupsApi.removeMember).toHaveBeenCalledWith('grp1', 'ctrl1')
+    )
   })
 })

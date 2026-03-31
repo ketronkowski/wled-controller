@@ -99,3 +99,26 @@
   border-color: var(--accent);
   color: var(--accent);
 }
+
+.removeBtn {
+  margin-left: 8px;
+  padding: 2px 7px;
+  border-radius: var(--radius);
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1;
+  transition: all var(--transition);
+  flex-shrink: 0;
+}
+
+.removeBtn:hover:not(:disabled) {
+  border-color: var(--offline);
+  color: var(--offline);
+}
+
+.removeBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

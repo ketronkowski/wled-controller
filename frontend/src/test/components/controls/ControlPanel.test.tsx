@@ -4,9 +4,19 @@ import userEvent from '@testing-library/user-event'
 import { ControlPanel } from '../../../components/controls/ControlPanel'
 import type { WledState } from '../../../types/wled'
 
+import type { ColorSlotConfig } from '../../../utils/parseFxData'
+
 // iro.js requires canvas which jsdom doesn't support — mock the whole module
 vi.mock('../../../components/controls/ColorPicker', () => ({
-  ColorPicker: () => <div data-testid="color-picker-mock" />,
+  ColorPicker: ({ colorSlots }: { colorSlots: ColorSlotConfig[] }) => (
+    <div
+      data-testid="color-picker-mock"
+      data-slot0-active={String(colorSlots[0].active)}
+      data-slot1-active={String(colorSlots[1].active)}
+      data-slot2-active={String(colorSlots[2].active)}
+      data-slot0-label={colorSlots[0].label}
+    />
+  ),
 }))
 
 function makeState(overrides: Partial<WledState> = {}): WledState {
@@ -161,5 +171,41 @@ describe('ControlPanel', () => {
       />
     )
     expect(screen.getByText('No segment data')).toBeInTheDocument()
+  })
+
+  it('passes colorSlots with all active when fxData is empty', () => {
+    render(
+      <ControlPanel
+        state={makeState()}
+        effects={EFFECTS}
+        fxData={[]}
+        palettes={PALETTES}
+        onCommand={vi.fn()}
+      />
+    )
+    const picker = screen.getByTestId('color-picker-mock')
+    expect(picker.getAttribute('data-slot0-active')).toBe('true')
+    expect(picker.getAttribute('data-slot1-active')).toBe('true')
+    expect(picker.getAttribute('data-slot2-active')).toBe('true')
+  })
+
+  it('passes colorSlots from fxData matching current effect index (fx=9)', () => {
+    // fx=9 in the state; supply fxData where index 9 has new format with only slot0 active
+    const fxData = Array(10).fill('Solid@!;!;;!;1d')
+    render(
+      <ControlPanel
+        state={makeState()}
+        effects={EFFECTS}
+        fxData={fxData}
+        palettes={PALETTES}
+        onCommand={vi.fn()}
+      />
+    )
+    const picker = screen.getByTestId('color-picker-mock')
+    // "Solid@!;!;;!;1d" → slot0=active(Fx), slot1=inactive, slot2=inactive
+    expect(picker.getAttribute('data-slot0-active')).toBe('true')
+    expect(picker.getAttribute('data-slot1-active')).toBe('false')
+    expect(picker.getAttribute('data-slot2-active')).toBe('false')
+    expect(picker.getAttribute('data-slot0-label')).toBe('Fx')
   })
 })
