@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import styles from './EffectSelector.module.css'
 import { WLED_EFFECT_DESCRIPTIONS } from '../../data/wledEffectDescriptions'
 import { parseFxData } from '../../utils/parseFxData'
@@ -39,8 +39,13 @@ export function EffectSelector({
   onChange,
 }: Props) {
   const [search, setSearch] = useState('')
+  const selectedItemRef = useRef<HTMLButtonElement>(null)
 
   const selectedEffectName = effects[selectedFx]
+
+  useEffect(() => {
+    selectedItemRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+  }, [selectedFx])
   const description = selectedEffectName ? WLED_EFFECT_DESCRIPTIONS[selectedEffectName] : undefined
 
   const filtered = useMemo(() => {
@@ -61,10 +66,17 @@ export function EffectSelector({
         onChange={e => setSearch(e.target.value)}
       />
 
+      {selectedEffectName && (
+        <div className={styles.activeEffect}>
+          Active: <strong>{selectedEffectName}</strong>
+        </div>
+      )}
+
       <div className={styles.list}>
         {filtered.map(({ name, i }) => (
           <button
             key={i}
+            ref={selectedFx === i ? selectedItemRef : undefined}
             className={`${styles.item} ${selectedFx === i ? styles.selected : ''}`}
             onClick={() => onChange({ fx: i })}
           >

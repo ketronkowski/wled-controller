@@ -16,6 +16,22 @@ export function ColorPicker({ colors, colorSlots, onChange }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const pickerRef = useRef<iro.ColorPicker | null>(null)
 
+  // Keep refs current so the iro event handler never reads stale closure values
+  const activeSlotRef = useRef(activeSlot)
+  const colorsRef = useRef(colors)
+  const onChangeRef = useRef(onChange)
+  useEffect(() => { activeSlotRef.current = activeSlot }, [activeSlot])
+  useEffect(() => { colorsRef.current = colors }, [colors])
+  useEffect(() => { onChangeRef.current = onChange }, [onChange])
+
+  // If the active slot becomes inactive (effect changed), reset to first active slot
+  useEffect(() => {
+    const firstActive = colorSlots.findIndex(s => s.active)
+    if (firstActive >= 0 && !colorSlots[activeSlot]?.active) {
+      setActiveSlot(firstActive)
+    }
+  }, [colorSlots]) // eslint-disable-line react-hooks/exhaustive-deps
+
   useEffect(() => {
     if (!containerRef.current) return
     const picker = iro.ColorPicker(containerRef.current, {
@@ -30,21 +46,24 @@ export function ColorPicker({ colors, colorSlots, onChange }: Props) {
       borderColor: '#404040',
     } as Parameters<typeof iro.ColorPicker>[1])
 
+    // Use input:change (user interaction only) instead of color:change (fires on
+    // programmatic set() too) to avoid a feedback loop when syncing the wheel to
+    // the selected slot's color.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handler = (color: any) => {
-      const newColors: [RGB, RGB, RGB] = [...colors] as [RGB, RGB, RGB]
-      newColors[activeSlot] = [color.red, color.green, color.blue]
-      onChange(newColors)
+      const newColors: [RGB, RGB, RGB] = [...colorsRef.current] as [RGB, RGB, RGB]
+      newColors[activeSlotRef.current] = [color.red, color.green, color.blue]
+      onChangeRef.current(newColors)
     }
-    picker.on('color:change', handler)
+    picker.on('input:change', handler)
 
     pickerRef.current = picker
     return () => {
-      picker.off('color:change', handler)
+      picker.off('input:change', handler)
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Sync color when slot or colors prop changes
+  // Sync color wheel when active slot or colors change
   useEffect(() => {
     if (pickerRef.current) {
       const [r, g, b] = colors[activeSlot]
@@ -52,15 +71,25 @@ export function ColorPicker({ colors, colorSlots, onChange }: Props) {
     }
   }, [activeSlot, colors])
 
+  const activeSlots = colorSlots.map((slot, i) => ({ slot, i })).filter(({ slot }) => slot.active)
+
+  if (activeSlots.length === 0) {
+    return (
+      <div className={styles.paletteOnly}>
+        This effect uses the palette — set colors via the Palettes tab.
+      </div>
+    )
+  }
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.tabs}>
-        {colorSlots.map((slot, i) => (
+        {activeSlots.map(({ slot, i }) => (
           <button
             key={i}
-            className={`${styles.tab} ${activeSlot === i ? styles.active : ''} ${!slot.active ? styles.inactive : ''}`}
+            className={`${styles.tab} ${activeSlot === i ? styles.active : ''}`}
             onClick={() => setActiveSlot(i)}
-            title={!slot.active ? `${slot.label} color (not used by this effect)` : slot.label}
+            title={slot.label}
           >
             <span
               className={styles.swatch}

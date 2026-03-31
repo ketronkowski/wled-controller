@@ -53,24 +53,16 @@ describe('ColorPicker', () => {
     expect(screen.queryByText('Tertiary')).not.toBeInTheDocument()
   })
 
-  it('inactive slots have the inactive class', () => {
+  it('inactive slots are NOT rendered', () => {
     renderPicker(SLOT1_INACTIVE)
-    const bgBtn = screen.getByRole('button', { name: /Bg/ })
-    const csBtn = screen.getByRole('button', { name: /Cs/ })
-    expect(bgBtn.className).toMatch(/inactive/)
-    expect(csBtn.className).toMatch(/inactive/)
+    expect(screen.queryByRole('button', { name: /Bg/ })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /Cs/ })).not.toBeInTheDocument()
   })
 
-  it('active slots do NOT have the inactive class', () => {
+  it('only active slots are rendered', () => {
     renderPicker(SLOT1_INACTIVE)
-    const fxBtn = screen.getByRole('button', { name: /Fx/ })
-    expect(fxBtn.className).not.toMatch(/inactive/)
-  })
-
-  it('inactive slots have descriptive title attribute', () => {
-    renderPicker(SLOT1_INACTIVE)
-    const bgBtn = screen.getByRole('button', { name: /Bg/ })
-    expect(bgBtn.getAttribute('title')).toMatch(/not used by this effect/)
+    expect(screen.getByRole('button', { name: /Fx/ })).toBeInTheDocument()
+    expect(screen.getAllByRole('button')).toHaveLength(1)
   })
 
   it('active slots have plain label as title', () => {
@@ -86,7 +78,7 @@ describe('ColorPicker', () => {
     expect(bgBtn.className).toMatch(/active/)
   })
 
-  it('uses custom labels from colorSlots', () => {
+  it('uses custom labels from colorSlots and hides inactive slot', () => {
     const custom: [ColorSlotConfig, ColorSlotConfig, ColorSlotConfig] = [
       { active: true, label: 'Foreground' },
       { active: true, label: 'Background' },
@@ -95,6 +87,6 @@ describe('ColorPicker', () => {
     renderPicker(custom)
     expect(screen.getByRole('button', { name: /Foreground/ })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Background/ })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /Tertiary/ })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /Tertiary/ })).not.toBeInTheDocument()
   })
 })
