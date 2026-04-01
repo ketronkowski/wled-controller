@@ -38,6 +38,10 @@ class ControllerController(private val controllerService: ControllerService) {
     fun fxData(@PathVariable id: String): List<String> =
         controllerService.getFxData(ObjectId(id))
 
+    @GetMapping("/{id}/palx")
+    fun paletteColors(@PathVariable id: String): Map<String, Any> =
+        controllerService.getPaletteColors(ObjectId(id))
+
     @PostMapping("/{id}/refresh")
     fun refresh(@PathVariable id: String): Controller =
         controllerService.refreshState(ObjectId(id))

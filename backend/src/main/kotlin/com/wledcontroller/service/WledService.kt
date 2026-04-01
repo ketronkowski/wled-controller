@@ -8,6 +8,7 @@ import org.springframework.web.client.RestClient
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.body
 import java.time.Duration
+import java.util.concurrent.ConcurrentHashMap
 
 @Service
 class WledService(
@@ -15,6 +16,7 @@ class WledService(
     private val objectMapper: ObjectMapper,
 ) {
     private val log = LoggerFactory.getLogger(WledService::class.java)
+    private val paletteColorCache = ConcurrentHashMap<String, Map<String, Any>>()
 
     fun getFullState(ip: String): WledFullResponse? = runCatching {
         restClient.get()
@@ -73,6 +75,29 @@ class WledService(
             .retrieve()
             .body<Map<String, Any?>>() ?: emptyMap()
     }.onFailure { log.warn("Failed to get config from $ip: ${it.message}") }.getOrDefault(emptyMap())
+
+    fun getPaletteColors(ip: String, page: Int): Map<String, Any> = runCatching {
+        restClient.get()
+            .uri("http://$ip/json/palx?page=$page")
+            .retrieve()
+            .body<Map<String, Any>>() ?: emptyMap()
+    }.onFailure { log.warn("Failed to get palette colors from $ip page $page: ${it.message}") }
+     .getOrDefault(emptyMap())
+
+    fun getAllPaletteColors(ip: String): Map<String, Any> =
+        paletteColorCache.getOrPut(ip) {
+            val combined = mutableMapOf<String, Any>()
+            var page = 0
+            while (page <= 20) {
+                val result = getPaletteColors(ip, page)
+                @Suppress("UNCHECKED_CAST")
+                val p = result["p"] as? Map<String, Any> ?: break
+                if (p.isEmpty()) break
+                combined.putAll(p)
+                page++
+            }
+            combined
+        }
 
     fun isReachable(ip: String): Boolean = runCatching {
         restClient.get()

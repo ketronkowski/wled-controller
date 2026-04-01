@@ -103,6 +103,11 @@ class ControllerService(
         return wledService.getFxData(controller.ip)
     }
 
+    fun getPaletteColors(id: ObjectId): Map<String, Any> {
+        val controller = findById(id)
+        return wledService.getAllPaletteColors(controller.ip)
+    }
+
     fun applyCommand(id: ObjectId, payload: ControlPayload): Controller {
         val controller = findById(id)
         val patch = wledService.buildStatePatch(payload)
