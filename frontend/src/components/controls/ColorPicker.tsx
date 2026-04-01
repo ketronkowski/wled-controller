@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import iro from '@jaames/iro'
 import type { ColorSlotConfig } from '../../utils/parseFxData'
 import styles from './ColorPicker.module.css'
@@ -8,10 +8,11 @@ type RGB = [number, number, number]
 interface Props {
   colors: [RGB, RGB, RGB]
   colorSlots: [ColorSlotConfig, ColorSlotConfig, ColorSlotConfig]
+  selectedPal?: number   // NEW: current selected palette ID for slot forcing
   onChange: (colors: [RGB, RGB, RGB]) => void
 }
 
-export function ColorPicker({ colors, colorSlots, onChange }: Props) {
+export function ColorPicker({ colors, colorSlots, selectedPal, onChange }: Props) {
   const [activeSlot, setActiveSlot] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
   const pickerRef = useRef<iro.ColorPicker | null>(null)
@@ -24,13 +25,29 @@ export function ColorPicker({ colors, colorSlots, onChange }: Props) {
   useEffect(() => { colorsRef.current = colors }, [colors])
   useEffect(() => { onChangeRef.current = onChange }, [onChange])
 
+  // Special palettes 2-5 force-show specific color slots regardless of effect fxdata.
+  // This matches WLED's updateSelectedPalette() behavior in index.js.
+  const effectiveSlots = useMemo<[ColorSlotConfig, ColorSlotConfig, ColorSlotConfig]>(() => {
+    const pal = selectedPal ?? 0
+    if (pal >= 2 && pal <= 5) {
+      return [0, 1, 2].map(i => ({
+        active: colorSlots[i].active
+          || i === 0                    // palettes 2,3,4,5 always show slot 0
+          || (i === 1 && pal >= 3)     // palettes 3,4,5 show slot 1
+          || (i === 2 && pal >= 4),    // palettes 4,5 show slot 2
+        label: colorSlots[i].label,
+      })) as [ColorSlotConfig, ColorSlotConfig, ColorSlotConfig]
+    }
+    return colorSlots
+  }, [colorSlots, selectedPal])
+
   // If the active slot becomes inactive (effect changed), reset to first active slot
   useEffect(() => {
-    const firstActive = colorSlots.findIndex(s => s.active)
-    if (firstActive >= 0 && !colorSlots[activeSlot]?.active) {
+    const firstActive = effectiveSlots.findIndex(s => s.active)
+    if (firstActive >= 0 && !effectiveSlots[activeSlot]?.active) {
       setActiveSlot(firstActive)
     }
-  }, [colorSlots]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [effectiveSlots]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!containerRef.current) return
@@ -71,7 +88,7 @@ export function ColorPicker({ colors, colorSlots, onChange }: Props) {
     }
   }, [activeSlot, colors])
 
-  const activeSlots = colorSlots.map((slot, i) => ({ slot, i })).filter(({ slot }) => slot.active)
+  const activeSlots = effectiveSlots.map((slot, i) => ({ slot, i })).filter(({ slot }) => slot.active)
 
   if (activeSlots.length === 0) {
     return (

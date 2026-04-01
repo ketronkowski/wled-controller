@@ -90,3 +90,59 @@ describe('ColorPicker', () => {
     expect(screen.queryByRole('button', { name: /Tertiary/ })).not.toBeInTheDocument()
   })
 })
+
+describe('selectedPal slot forcing', () => {
+  const EFFECT_SLOTS_ONE_ACTIVE: [ColorSlotConfig, ColorSlotConfig, ColorSlotConfig] = [
+    { active: true, label: 'Fx' },
+    { active: false, label: 'Bg' },
+    { active: false, label: 'Cs' },
+  ]
+
+  it('pal=2 (* Color 1) forces slot 0 visible only', () => {
+    render(
+      <ColorPicker colors={DEFAULT_COLORS} colorSlots={EFFECT_SLOTS_ONE_ACTIVE} selectedPal={2} onChange={vi.fn()} />
+    )
+    expect(screen.getByRole('button', { name: /Fx/ })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /Bg/ })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /Cs/ })).not.toBeInTheDocument()
+  })
+
+  it('pal=3 (* Colors 1&2) forces slots 0 and 1 visible', () => {
+    render(
+      <ColorPicker colors={DEFAULT_COLORS} colorSlots={EFFECT_SLOTS_ONE_ACTIVE} selectedPal={3} onChange={vi.fn()} />
+    )
+    expect(screen.getByRole('button', { name: /Fx/ })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Bg/ })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /Cs/ })).not.toBeInTheDocument()
+  })
+
+  it('pal=4 (* Color Gradient) forces all 3 slots visible', () => {
+    render(
+      <ColorPicker colors={DEFAULT_COLORS} colorSlots={EFFECT_SLOTS_ONE_ACTIVE} selectedPal={4} onChange={vi.fn()} />
+    )
+    expect(screen.getByRole('button', { name: /Fx/ })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Bg/ })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Cs/ })).toBeInTheDocument()
+  })
+
+  it('pal=5 (* Colors Only) forces all 3 slots visible', () => {
+    render(
+      <ColorPicker colors={DEFAULT_COLORS} colorSlots={EFFECT_SLOTS_ONE_ACTIVE} selectedPal={5} onChange={vi.fn()} />
+    )
+    expect(screen.getAllByRole('button')).toHaveLength(3)
+  })
+
+  it('pal=0 (Default) does not force any slots', () => {
+    render(
+      <ColorPicker colors={DEFAULT_COLORS} colorSlots={EFFECT_SLOTS_ONE_ACTIVE} selectedPal={0} onChange={vi.fn()} />
+    )
+    expect(screen.getAllByRole('button')).toHaveLength(1)
+  })
+
+  it('pal=6 (regular palette) does not force any slots', () => {
+    render(
+      <ColorPicker colors={DEFAULT_COLORS} colorSlots={EFFECT_SLOTS_ONE_ACTIVE} selectedPal={6} onChange={vi.fn()} />
+    )
+    expect(screen.getAllByRole('button')).toHaveLength(1)
+  })
+})
