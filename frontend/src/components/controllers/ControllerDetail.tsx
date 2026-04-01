@@ -62,6 +62,7 @@ export function ControllerDetail({ controllerId }: Props) {
         palettes={liveState.palettes}
         onCommand={sendCmd.mutate}
         sending={sendCmd.isPending}
+        controllerId={controllerId}
       />
 
       <SnapshotList

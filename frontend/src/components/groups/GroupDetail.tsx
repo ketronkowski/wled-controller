@@ -7,7 +7,7 @@ import { ControlPanel } from '../controls/ControlPanel'
 import { SnapshotList } from '../snapshots/SnapshotList'
 import { GroupEditor } from './GroupEditor'
 import styles from './GroupDetail.module.css'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 interface Props {
   groupId: string
@@ -25,6 +25,7 @@ export function GroupDetail({ groupId }: Props) {
   const qc = useQueryClient()
   const [lastResult, setLastResult] = useState<GroupControlResult | null>(null)
   const [editorOpen, setEditorOpen] = useState(false)
+  const firstOnlineRef = useRef<{ id: string } | undefined>(undefined)
 
   const { data: group } = useQuery({
     queryKey: ['group', groupId],
@@ -41,6 +42,7 @@ export function GroupDetail({ groupId }: Props) {
     group?.members.some(m => m.type === 'CONTROLLER' && m.id === c.id)
   ) ?? []
   const firstOnline = memberControllers.find(c => c.online)
+  useEffect(() => { firstOnlineRef.current = firstOnline }, [firstOnline])
 
   const { data: liveState } = useQuery({
     queryKey: ['controller-state', firstOnline?.id],
@@ -61,6 +63,9 @@ export function GroupDetail({ groupId }: Props) {
     onSuccess: result => {
       setLastResult(result)
       qc.invalidateQueries({ queryKey: ['controllers'] })
+      if (firstOnlineRef.current) {
+        qc.invalidateQueries({ queryKey: ['controller-state', firstOnlineRef.current.id] })
+      }
     },
   })
 
@@ -101,6 +106,7 @@ export function GroupDetail({ groupId }: Props) {
         palettes={liveState?.palettes ?? []}
         onCommand={sendCmd.mutate}
         sending={sendCmd.isPending}
+        controllerId={firstOnline?.id}
       />
 
       <div className={styles.memberList}>
