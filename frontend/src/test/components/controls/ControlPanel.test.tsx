@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ControlPanel } from '../../../components/controls/ControlPanel'
 import type { WledState } from '../../../types/wled'
 
@@ -45,9 +46,16 @@ function makeState(overrides: Partial<WledState> = {}): WledState {
 const EFFECTS = ['Solid', 'Blink', 'Rainbow']
 const PALETTES = ['Default', 'Rainbow', 'Forest']
 
+function renderPanel(ui: JSX.Element) {
+  const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+  return render(
+    <QueryClientProvider client={client}>{ui}</QueryClientProvider>
+  )
+}
+
 describe('ControlPanel', () => {
   it('renders the power button', () => {
-    render(
+    renderPanel(
       <ControlPanel
         state={makeState()}
         effects={EFFECTS}
@@ -61,7 +69,7 @@ describe('ControlPanel', () => {
 
   it('calls onCommand with on:false when device is on and power button clicked', async () => {
     const onCommand = vi.fn()
-    render(
+    renderPanel(
       <ControlPanel
         state={makeState({ on: true })}
         effects={EFFECTS}
@@ -76,7 +84,7 @@ describe('ControlPanel', () => {
 
   it('calls onCommand with on:true when device is off and power button clicked', async () => {
     const onCommand = vi.fn()
-    render(
+    renderPanel(
       <ControlPanel
         state={makeState({ on: false })}
         effects={EFFECTS}
@@ -90,7 +98,7 @@ describe('ControlPanel', () => {
   })
 
   it('renders brightness slider with correct value', () => {
-    render(
+    renderPanel(
       <ControlPanel
         state={makeState({ bri: 200 })}
         effects={EFFECTS}
@@ -104,7 +112,7 @@ describe('ControlPanel', () => {
   })
 
   it('shows Colors tab by default with ColorPicker', () => {
-    render(
+    renderPanel(
       <ControlPanel
         state={makeState()}
         effects={EFFECTS}
@@ -117,7 +125,7 @@ describe('ControlPanel', () => {
   })
 
   it('switches to Effects tab and shows effect list', async () => {
-    render(
+    renderPanel(
       <ControlPanel
         state={makeState()}
         effects={EFFECTS}
@@ -132,7 +140,7 @@ describe('ControlPanel', () => {
   })
 
   it('switches to Palettes tab and shows palette list', async () => {
-    render(
+    renderPanel(
       <ControlPanel
         state={makeState()}
         effects={EFFECTS}
@@ -147,7 +155,7 @@ describe('ControlPanel', () => {
   })
 
   it('disables power button when sending', () => {
-    render(
+    renderPanel(
       <ControlPanel
         state={makeState()}
         effects={EFFECTS}
@@ -161,7 +169,7 @@ describe('ControlPanel', () => {
   })
 
   it('shows empty state when no segment data', () => {
-    render(
+    renderPanel(
       <ControlPanel
         state={makeState({ seg: [] })}
         effects={EFFECTS}
@@ -174,7 +182,7 @@ describe('ControlPanel', () => {
   })
 
   it('passes colorSlots with all active when fxData is empty', () => {
-    render(
+    renderPanel(
       <ControlPanel
         state={makeState()}
         effects={EFFECTS}
@@ -192,7 +200,7 @@ describe('ControlPanel', () => {
   it('passes colorSlots from fxData matching current effect index (fx=9)', () => {
     // fx=9 in the state; supply fxData where index 9 has new format with only slot0 active
     const fxData = Array(10).fill('Solid@!;!;;!;1d')
-    render(
+    renderPanel(
       <ControlPanel
         state={makeState()}
         effects={EFFECTS}

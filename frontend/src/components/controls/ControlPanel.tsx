@@ -1,10 +1,12 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import type { WledState } from '../../types/wled'
 import type { ControlPayload } from '../../types/wled'
 import { ColorPicker } from './ColorPicker'
 import { EffectSelector } from './EffectSelector'
 import { PaletteSelector } from './PaletteSelector'
 import { parseFxData } from '../../utils/parseFxData'
+import { controllersApi } from '../../api/controllers'
 import styles from './ControlPanel.module.css'
 
 type RGB = [number, number, number]
@@ -16,18 +18,43 @@ interface Props {
   palettes: string[]
   onCommand: (payload: ControlPayload) => void
   sending?: boolean
+  controllerId?: string
 }
 
 type Tab = 'colors' | 'effects' | 'palettes'
 
-export function ControlPanel({ state, effects, fxData, palettes, onCommand, sending }: Props) {
+export function ControlPanel({ state, effects, fxData, palettes, onCommand, sending, controllerId }: Props) {
   const [tab, setTab] = useState<Tab>('colors')
   const seg = state.seg[state.mainseg] ?? state.seg[0]
-  const effectParsed = useMemo(() => parseFxData(fxData[seg?.fx ?? 0] ?? ''), [fxData, seg?.fx])
+
+  const { data: paletteColors } = useQuery({
+    queryKey: ['palx', controllerId],
+    queryFn: () => controllersApi.palx(controllerId!),
+    enabled: !!controllerId,
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
+  })
+
+  const [localFx, setLocalFx] = useState<number | null>(null)
+  const [localPal, setLocalPal] = useState<number | null>(null)
+
+  useEffect(() => { setLocalFx(null) }, [seg?.fx])
+  useEffect(() => { setLocalPal(null) }, [seg?.pal])
+
+  const effectiveFx = localFx ?? seg?.fx ?? 0
+  const effectivePal = localPal ?? seg?.pal ?? 0
+
+  const effectParsed = useMemo(() => parseFxData(fxData[effectiveFx] ?? ''), [fxData, effectiveFx])
 
   if (!seg) return <div className={styles.empty}>No segment data</div>
 
   const colors = (seg.col ?? [[0,0,0],[0,0,0],[0,0,0]]) as [RGB, RGB, RGB]
+
+  const handleCommand = (payload: ControlPayload) => {
+    if (payload.fx !== undefined) setLocalFx(payload.fx)
+    if (payload.pal !== undefined) setLocalPal(payload.pal)
+    onCommand(payload)
+  }
 
   return (
     <div className={styles.panel}>
@@ -35,7 +62,7 @@ export function ControlPanel({ state, effects, fxData, palettes, onCommand, send
       <div className={styles.topBar}>
         <button
           className={`${styles.powerBtn} ${state.on ? styles.on : styles.off}`}
-          onClick={() => onCommand({ on: !state.on })}
+          onClick={() => handleCommand({ on: !state.on })}
           disabled={sending}
         >
           ⏻
@@ -45,7 +72,7 @@ export function ControlPanel({ state, effects, fxData, palettes, onCommand, send
           <span className={styles.label}>Brightness</span>
           <input
             type="range" min={1} max={255} value={state.bri}
-            onChange={e => onCommand({ bri: +e.target.value })}
+            onChange={e => handleCommand({ bri: +e.target.value })}
             className={styles.slider}
             disabled={sending}
           />
@@ -72,14 +99,15 @@ export function ControlPanel({ state, effects, fxData, palettes, onCommand, send
           <ColorPicker
             colors={colors}
             colorSlots={effectParsed.colorSlots}
-            onChange={cols => onCommand({ col: cols })}
+            selectedPal={effectivePal}
+            onChange={cols => handleCommand({ col: cols })}
           />
         )}
         {tab === 'effects' && (
           <EffectSelector
             effects={effects}
             fxData={fxData}
-            selectedFx={seg.fx}
+            selectedFx={effectiveFx}
             speed={seg.sx}
             intensity={seg.ix}
             c1={seg.c1}
@@ -88,14 +116,16 @@ export function ControlPanel({ state, effects, fxData, palettes, onCommand, send
             o1={seg.o1}
             o2={seg.o2}
             o3={seg.o3}
-            onChange={params => onCommand(params)}
+            onChange={params => handleCommand(params)}
           />
         )}
         {tab === 'palettes' && (
           <PaletteSelector
             palettes={palettes}
-            selected={seg.pal}
-            onChange={pal => onCommand({ pal })}
+            selected={effectivePal}
+            paletteColors={paletteColors}
+            userColors={colors}
+            onChange={pal => handleCommand({ pal })}
           />
         )}
       </div>
