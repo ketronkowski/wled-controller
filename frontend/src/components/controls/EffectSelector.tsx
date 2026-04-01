@@ -48,12 +48,20 @@ export function EffectSelector({
   }, [selectedFx])
   const description = selectedEffectName ? WLED_EFFECT_DESCRIPTIONS[selectedEffectName] : undefined
 
+  const sortedEffects = useMemo(() => {
+    if (effects.length === 0) return []
+    const solid = { name: effects[0], i: 0 }
+    const rest = effects
+      .slice(1)
+      .map((name, j) => ({ name, i: j + 1 }))
+      .sort((a, b) => a.name.localeCompare(b.name))
+    return [solid, ...rest]
+  }, [effects])
+
   const filtered = useMemo(() => {
     const q = search.toLowerCase()
-    return effects
-      .map((name, i) => ({ name, i }))
-      .filter(({ name }) => name.toLowerCase().includes(q))
-  }, [effects, search])
+    return sortedEffects.filter(({ name }) => name.toLowerCase().includes(q))
+  }, [sortedEffects, search])
 
   const params = useMemo(() => parseFxData(fxData[selectedFx] ?? ''), [fxData, selectedFx])
 
