@@ -8,6 +8,6 @@ export const controllersApi = {
   delete: (id: string) => apiClient.delete(`/controllers/${id}`),
   liveState: (id: string) => apiClient.get<LiveState>(`/controllers/${id}/state`).then(r => r.data),
   fxData: (id: string) => apiClient.get<string[]>(`/controllers/${id}/fxdata`).then(r => r.data),
-  palx: (id: string) => apiClient.get<Record<string, Array<number[] | string>>>(`/controllers/${id}/palx`).then(r => r.data),
+  palx: (id: string) => apiClient.get<Record<string, Array<(number | string)[] | string>>>(`/controllers/${id}/palx`).then(r => r.data),
   refresh: (id: string) => apiClient.post<Controller>(`/controllers/${id}/refresh`).then(r => r.data),
 }

@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
+import type { ReactElement } from 'react'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
@@ -46,7 +47,7 @@ function makeState(overrides: Partial<WledState> = {}): WledState {
 const EFFECTS = ['Solid', 'Blink', 'Rainbow']
 const PALETTES = ['Default', 'Rainbow', 'Forest']
 
-function renderPanel(ui: JSX.Element) {
+function renderPanel(ui: ReactElement) {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
   return render(
     <QueryClientProvider client={client}>{ui}</QueryClientProvider>

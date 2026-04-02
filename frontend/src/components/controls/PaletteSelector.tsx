@@ -4,13 +4,13 @@ import styles from './PaletteSelector.module.css'
 interface Props {
   palettes: string[]
   selected: number
-  paletteColors?: Record<string, Array<number[] | string>>
+  paletteColors?: Record<string, Array<(number | string)[] | string>>
   userColors?: [[number,number,number],[number,number,number],[number,number,number]]
   onChange: (pal: number) => void
 }
 
 function genGradientCss(
-  stops: Array<number[] | string>,
+  stops: Array<(number | string)[] | string>,
   userColors: [[number,number,number],[number,number,number],[number,number,number]] | undefined
 ): string {
   if (!stops || stops.length === 0) return 'transparent'
