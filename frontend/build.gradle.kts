@@ -22,5 +22,14 @@ val npmTest by tasks.registering(com.github.gradle.node.npm.task.NpmTask::class)
     args = listOf("run", "test", "--", "--run")
 }
 
+val npmTypeCheck by tasks.registering(com.github.gradle.node.npm.task.NpmTask::class) {
+    dependsOn(tasks.npmInstall)
+    args = listOf("exec", "--", "tsc", "-b", "--noEmit")
+    inputs.dir("src")
+    inputs.file("tsconfig.json")
+    inputs.file("tsconfig.app.json")
+    inputs.file("tsconfig.node.json")
+}
+
 tasks.register("build") { dependsOn(npmBuild) }
-tasks.register("check") { dependsOn(npmTest) }
+tasks.register("check") { dependsOn(npmTypeCheck, npmTest) }
