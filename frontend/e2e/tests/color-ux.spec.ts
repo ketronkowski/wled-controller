@@ -38,7 +38,7 @@ for (const ctrl of uniqueControllers) {
       await controllerPage.switchTab('Colors')
 
       // Color slot buttons are rendered inside ColorPicker's tabs wrapper
-      const slotButtons = app.page.locator('[class*="tabs"] [class*="tab"]')
+      const slotButtons = app.page.locator('[data-testid="color-slot-tab"]')
       await expect(slotButtons.first()).toBeVisible({ timeout: 5000 })
 
       const count = await slotButtons.count()
@@ -56,7 +56,7 @@ for (const ctrl of uniqueControllers) {
 
       await controllerPage.switchTab('Colors')
 
-      const slotButtons = app.page.locator('[class*="tabs"] [class*="tab"]')
+      const slotButtons = app.page.locator('[data-testid="color-slot-tab"]')
       await expect(slotButtons.first()).toBeVisible({ timeout: 5000 })
 
       const count = await slotButtons.count()
@@ -79,7 +79,7 @@ for (const ctrl of uniqueControllers) {
 
       await controllerPage.switchTab('Colors')
 
-      const slotButtons = app.page.locator('[class*="tabs"] [class*="tab"]')
+      const slotButtons = app.page.locator('[data-testid="color-slot-tab"]')
       await expect(slotButtons.first()).toBeVisible({ timeout: 5000 })
 
       // The first slot button should be active on initial render
@@ -96,7 +96,7 @@ for (const ctrl of uniqueControllers) {
       await controllerPage.switchTab('Colors')
 
       // Each slot button contains a swatch span with an inline background style
-      const swatches = app.page.locator('[class*="tabs"] [class*="tab"] [class*="swatch"]')
+      const swatches = app.page.locator('[data-testid="color-slot-tab"] [class*="swatch"]')
       await expect(swatches.first()).toBeVisible({ timeout: 5000 })
 
       const count = await swatches.count()

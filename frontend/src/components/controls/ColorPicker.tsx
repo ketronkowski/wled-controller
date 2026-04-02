@@ -104,6 +104,7 @@ export function ColorPicker({ colors, colorSlots, selectedPal, onChange }: Props
         {activeSlots.map(({ slot, i }) => (
           <button
             key={i}
+            data-testid="color-slot-tab"
             className={`${styles.tab} ${activeSlot === i ? styles.active : ''}`}
             onClick={() => setActiveSlot(i)}
             title={slot.label}

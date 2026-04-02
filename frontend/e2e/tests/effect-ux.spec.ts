@@ -107,7 +107,7 @@ for (const ctrl of uniqueControllers) {
       await controllerPage.switchTab('Colors')
 
       // Blink has slot labels "Fx", "Bg", "3" — check that the tab area rendered
-      const slotButtons = app.page.locator('[class*="tabs"] [class*="tab"]')
+      const slotButtons = app.page.locator('[data-testid="color-slot-tab"]')
       await expect(slotButtons.first()).toBeVisible({ timeout: 5000 })
       const count = await slotButtons.count()
       // Blink has 3 color slots
@@ -136,7 +136,7 @@ for (const ctrl of uniqueControllers) {
 
       // Switch to Colors tab and verify slot labels
       await controllerPage.switchTab('Colors')
-      const slotButtons = app.page.locator('[class*="tabs"] [class*="tab"]')
+      const slotButtons = app.page.locator('[data-testid="color-slot-tab"]')
       await expect(slotButtons.first()).toBeVisible({ timeout: 5000 })
 
       const labels: string[] = await slotButtons.allTextContents()

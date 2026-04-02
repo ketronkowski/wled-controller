@@ -124,7 +124,7 @@ for (const ctrl of uniqueControllers) {
         // Switch to Colors tab and count visible slot buttons
         await controllerPage.switchTab('Colors')
         // Color slot buttons are inside the ColorPicker tabs area
-        const slotButtons = app.page.locator('[class*="tabs"] [class*="tab"]')
+        const slotButtons = app.page.locator('[data-testid="color-slot-tab"]')
         await expect(slotButtons.first()).toBeVisible({ timeout: 5000 })
         const slotCount = await slotButtons.count()
         expect(slotCount).toBe(expectedSlots)
@@ -156,7 +156,7 @@ for (const ctrl of uniqueControllers) {
 
       // Colors tab should revert to Solid's 3 effect-based slots
       await controllerPage.switchTab('Colors')
-      const slotButtons = app.page.locator('[class*="tabs"] [class*="tab"]')
+      const slotButtons = app.page.locator('[data-testid="color-slot-tab"]')
       await expect(slotButtons.first()).toBeVisible({ timeout: 5000 })
       const slotCount = await slotButtons.count()
       expect(slotCount).toBe(3)
