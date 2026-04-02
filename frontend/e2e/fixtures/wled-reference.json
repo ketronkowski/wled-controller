@@ -1,0 +1,1092 @@
+{
+  "capturedAt": "2026-04-02T00:02:49.557Z",
+  "wledUrl": "http://192.168.5.51",
+  "effectOrder": [
+    {
+      "name": "Solid",
+      "wledId": 0
+    },
+    {
+      "name": "Akemi 🎨▦♫",
+      "wledId": 186
+    },
+    {
+      "name": "Android 🎨⋮",
+      "wledId": 27
+    },
+    {
+      "name": "Aurora 🎨⋮",
+      "wledId": 38
+    },
+    {
+      "name": "Black Hole 🎨▦",
+      "wledId": 183
+    },
+    {
+      "name": "Blends 🎨⋮",
+      "wledId": 115
+    },
+    {
+      "name": "Blink 🎨•⋮",
+      "wledId": 1
+    },
+    {
+      "name": "Blink Rainbow 🎨•⋮",
+      "wledId": 26
+    },
+    {
+      "name": "Blobs 🎨▦",
+      "wledId": 121
+    },
+    {
+      "name": "Blurz 🎨⋮♫",
+      "wledId": 163
+    },
+    {
+      "name": "Bouncing Balls 🎨⋮",
+      "wledId": 91
+    },
+    {
+      "name": "Bpm 🎨⋮",
+      "wledId": 68
+    },
+    {
+      "name": "Breathe 🎨•⋮",
+      "wledId": 2
+    },
+    {
+      "name": "Candle 🎨•⋮",
+      "wledId": 88
+    },
+    {
+      "name": "Candle Multi 🎨⋮",
+      "wledId": 102
+    },
+    {
+      "name": "Chase 🎨⋮",
+      "wledId": 28
+    },
+    {
+      "name": "Chase 2 🎨⋮",
+      "wledId": 37
+    },
+    {
+      "name": "Chase 3 🎨⋮",
+      "wledId": 54
+    },
+    {
+      "name": "Chase Flash 🎨⋮",
+      "wledId": 31
+    },
+    {
+      "name": "Chase Flash Rnd 🎨⋮",
+      "wledId": 32
+    },
+    {
+      "name": "Chase Rainbow 🎨⋮",
+      "wledId": 30
+    },
+    {
+      "name": "Chase Random 🎨⋮",
+      "wledId": 29
+    },
+    {
+      "name": "Chunchun 🎨⋮",
+      "wledId": 111
+    },
+    {
+      "name": "Colored Bursts 🎨▦",
+      "wledId": 167
+    },
+    {
+      "name": "Colorful 🎨⋮",
+      "wledId": 34
+    },
+    {
+      "name": "Colorloop 🎨•⋮",
+      "wledId": 8
+    },
+    {
+      "name": "Colortwinkles 🎨⋮",
+      "wledId": 74
+    },
+    {
+      "name": "Colorwaves 🎨⋮",
+      "wledId": 67
+    },
+    {
+      "name": "Crazy Bees ▦",
+      "wledId": 119
+    },
+    {
+      "name": "Dancing Shadows 🎨⋮",
+      "wledId": 112
+    },
+    {
+      "name": "Dissolve 🎨⋮",
+      "wledId": 18
+    },
+    {
+      "name": "Dissolve Rnd 🎨⋮",
+      "wledId": 19
+    },
+    {
+      "name": "Distortion Waves ▦",
+      "wledId": 124
+    },
+    {
+      "name": "DJ Light •⋮♫",
+      "wledId": 159
+    },
+    {
+      "name": "DNA 🎨▦",
+      "wledId": 152
+    },
+    {
+      "name": "DNA Spiral 🎨▦",
+      "wledId": 182
+    },
+    {
+      "name": "Drift 🎨▦",
+      "wledId": 164
+    },
+    {
+      "name": "Drift Rose ▦",
+      "wledId": 123
+    },
+    {
+      "name": "Drip 🎨⋮",
+      "wledId": 96
+    },
+    {
+      "name": "Dynamic 🎨⋮",
+      "wledId": 7
+    },
+    {
+      "name": "Dynamic Smooth 🎨⋮",
+      "wledId": 117
+    },
+    {
+      "name": "Fade 🎨•⋮",
+      "wledId": 12
+    },
+    {
+      "name": "Fairy 🎨⋮",
+      "wledId": 49
+    },
+    {
+      "name": "Fairytwinkle 🎨⋮",
+      "wledId": 51
+    },
+    {
+      "name": "Fill Noise 🎨⋮",
+      "wledId": 69
+    },
+    {
+      "name": "Fire 2012 🎨⋮",
+      "wledId": 66
+    },
+    {
+      "name": "Fire Flicker 🎨•⋮",
+      "wledId": 45
+    },
+    {
+      "name": "Firenoise 🎨▦",
+      "wledId": 149
+    },
+    {
+      "name": "Fireworks 🎨⋮▦",
+      "wledId": 42
+    },
+    {
+      "name": "Fireworks 1D 🎨⋮▦",
+      "wledId": 90
+    },
+    {
+      "name": "Fireworks Starburst 🎨⋮",
+      "wledId": 89
+    },
+    {
+      "name": "Flow 🎨⋮",
+      "wledId": 110
+    },
+    {
+      "name": "Flow Stripe ⋮",
+      "wledId": 179
+    },
+    {
+      "name": "Freqmap 🎨⋮♫",
+      "wledId": 155
+    },
+    {
+      "name": "Freqmatrix •⋮♫",
+      "wledId": 138
+    },
+    {
+      "name": "Freqpixels 🎨⋮♫",
+      "wledId": 141
+    },
+    {
+      "name": "Freqwave •⋮♫",
+      "wledId": 137
+    },
+    {
+      "name": "Frizzles 🎨▦",
+      "wledId": 177
+    },
+    {
+      "name": "Funky Plank ▦♫",
+      "wledId": 160
+    },
+    {
+      "name": "Game Of Life 🎨▦",
+      "wledId": 172
+    },
+    {
+      "name": "GEQ 🎨▦♫",
+      "wledId": 139
+    },
+    {
+      "name": "Ghost Rider 🎨▦",
+      "wledId": 120
+    },
+    {
+      "name": "Glitter 🎨⋮",
+      "wledId": 87
+    },
+    {
+      "name": "Gradient 🎨⋮",
+      "wledId": 46
+    },
+    {
+      "name": "Gravcenter 🎨⋮♪",
+      "wledId": 156
+    },
+    {
+      "name": "Gravcentric 🎨⋮♪",
+      "wledId": 157
+    },
+    {
+      "name": "Gravfreq 🎨⋮♫",
+      "wledId": 158
+    },
+    {
+      "name": "Gravimeter 🎨⋮♪",
+      "wledId": 132
+    },
+    {
+      "name": "Halloween Eyes 🎨⋮▦",
+      "wledId": 82
+    },
+    {
+      "name": "Heartbeat 🎨•⋮",
+      "wledId": 100
+    },
+    {
+      "name": "Hiphotic 🎨▦",
+      "wledId": 180
+    },
+    {
+      "name": "ICU 🎨⋮",
+      "wledId": 58
+    },
+    {
+      "name": "Juggle 🎨⋮",
+      "wledId": 64
+    },
+    {
+      "name": "Juggles 🎨•⋮♪",
+      "wledId": 130
+    },
+    {
+      "name": "Julia 🎨▦",
+      "wledId": 168
+    },
+    {
+      "name": "Lake 🎨⋮",
+      "wledId": 75
+    },
+    {
+      "name": "Lighthouse 🎨⋮",
+      "wledId": 41
+    },
+    {
+      "name": "Lightning 🎨⋮",
+      "wledId": 57
+    },
+    {
+      "name": "Lissajous 🎨▦",
+      "wledId": 176
+    },
+    {
+      "name": "Loading 🎨⋮",
+      "wledId": 47
+    },
+    {
+      "name": "Matripix 🎨⋮♪",
+      "wledId": 131
+    },
+    {
+      "name": "Matrix ▦",
+      "wledId": 153
+    },
+    {
+      "name": "Metaballs 🎨▦",
+      "wledId": 154
+    },
+    {
+      "name": "Meteor 🎨⋮",
+      "wledId": 76
+    },
+    {
+      "name": "Meteor Smooth 🎨⋮",
+      "wledId": 77
+    },
+    {
+      "name": "Midnoise 🎨⋮♪",
+      "wledId": 135
+    },
+    {
+      "name": "Multi Comet 🎨⋮",
+      "wledId": 59
+    },
+    {
+      "name": "Noise 1 🎨⋮",
+      "wledId": 70
+    },
+    {
+      "name": "Noise 2 🎨⋮",
+      "wledId": 71
+    },
+    {
+      "name": "Noise 3 🎨⋮",
+      "wledId": 72
+    },
+    {
+      "name": "Noise 4 🎨⋮",
+      "wledId": 73
+    },
+    {
+      "name": "Noise Pal 🎨⋮",
+      "wledId": 107
+    },
+    {
+      "name": "Noise2D 🎨▦",
+      "wledId": 146
+    },
+    {
+      "name": "Noisefire •⋮♪",
+      "wledId": 143
+    },
+    {
+      "name": "Noisemeter 🎨⋮♪",
+      "wledId": 136
+    },
+    {
+      "name": "Noisemove 🎨•⋮♫",
+      "wledId": 145
+    },
+    {
+      "name": "Octopus 🎨▦",
+      "wledId": 126
+    },
+    {
+      "name": "Oscillate 🎨⋮",
+      "wledId": 62
+    },
+    {
+      "name": "Pacifica 🎨⋮",
+      "wledId": 101
+    },
+    {
+      "name": "Palette 🎨⋮▦",
+      "wledId": 65
+    },
+    {
+      "name": "Percent 🎨⋮",
+      "wledId": 98
+    },
+    {
+      "name": "Perlin Move 🎨⋮",
+      "wledId": 147
+    },
+    {
+      "name": "Phased 🎨⋮",
+      "wledId": 105
+    },
+    {
+      "name": "Phased Noise 🎨⋮",
+      "wledId": 109
+    },
+    {
+      "name": "Pixels 🎨⋮♪",
+      "wledId": 128
+    },
+    {
+      "name": "Pixelwave 🎨⋮♪",
+      "wledId": 129
+    },
+    {
+      "name": "Plasma 🎨⋮",
+      "wledId": 97
+    },
+    {
+      "name": "Plasma Ball 🎨▦",
+      "wledId": 178
+    },
+    {
+      "name": "Plasmoid 🎨•⋮♪",
+      "wledId": 133
+    },
+    {
+      "name": "Polar Lights ▦",
+      "wledId": 174
+    },
+    {
+      "name": "Popcorn 🎨⋮",
+      "wledId": 95
+    },
+    {
+      "name": "Pride 2015 ⋮",
+      "wledId": 63
+    },
+    {
+      "name": "Puddlepeak 🎨⋮♪",
+      "wledId": 144
+    },
+    {
+      "name": "Puddles 🎨⋮♪",
+      "wledId": 134
+    },
+    {
+      "name": "Pulser 🎨▦",
+      "wledId": 162
+    },
+    {
+      "name": "Railway 🎨⋮",
+      "wledId": 78
+    },
+    {
+      "name": "Rain 🎨⋮▦",
+      "wledId": 43
+    },
+    {
+      "name": "Rainbow 🎨⋮",
+      "wledId": 9
+    },
+    {
+      "name": "Rainbow Runner 🎨⋮",
+      "wledId": 33
+    },
+    {
+      "name": "Random Colors 🎨•⋮",
+      "wledId": 5
+    },
+    {
+      "name": "Ripple 🎨⋮▦",
+      "wledId": 79
+    },
+    {
+      "name": "Ripple Peak 🎨⋮♪",
+      "wledId": 148
+    },
+    {
+      "name": "Ripple Rainbow 🎨⋮▦",
+      "wledId": 99
+    },
+    {
+      "name": "Rocktaves 🎨•⋮♫",
+      "wledId": 185
+    },
+    {
+      "name": "Rolling Balls 🎨⋮",
+      "wledId": 48
+    },
+    {
+      "name": "Rotozoomer 🎨▦",
+      "wledId": 114
+    },
+    {
+      "name": "Running 🎨⋮",
+      "wledId": 15
+    },
+    {
+      "name": "Running Dual 🎨⋮",
+      "wledId": 52
+    },
+    {
+      "name": "Saw 🎨⋮",
+      "wledId": 16
+    },
+    {
+      "name": "Scan 🎨⋮",
+      "wledId": 10
+    },
+    {
+      "name": "Scan Dual 🎨⋮",
+      "wledId": 11
+    },
+    {
+      "name": "Scanner 🎨⋮",
+      "wledId": 40
+    },
+    {
+      "name": "Scanner Dual 🎨⋮",
+      "wledId": 60
+    },
+    {
+      "name": "Scrolling Text 🎨▦",
+      "wledId": 122
+    },
+    {
+      "name": "Sindots 🎨▦",
+      "wledId": 181
+    },
+    {
+      "name": "Sine 🎨⋮",
+      "wledId": 108
+    },
+    {
+      "name": "Sinelon 🎨⋮",
+      "wledId": 92
+    },
+    {
+      "name": "Sinelon Dual 🎨⋮",
+      "wledId": 93
+    },
+    {
+      "name": "Sinelon Rainbow 🎨⋮",
+      "wledId": 94
+    },
+    {
+      "name": "Soap 🎨▦",
+      "wledId": 125
+    },
+    {
+      "name": "Solid Glitter ⋮",
+      "wledId": 103
+    },
+    {
+      "name": "Solid Pattern 🎨⋮",
+      "wledId": 83
+    },
+    {
+      "name": "Solid Pattern Tri ⋮",
+      "wledId": 84
+    },
+    {
+      "name": "Spaceships 🎨▦",
+      "wledId": 118
+    },
+    {
+      "name": "Sparkle 🎨⋮",
+      "wledId": 20
+    },
+    {
+      "name": "Sparkle Dark 🎨⋮",
+      "wledId": 21
+    },
+    {
+      "name": "Sparkle+ 🎨⋮",
+      "wledId": 22
+    },
+    {
+      "name": "Spots 🎨⋮",
+      "wledId": 85
+    },
+    {
+      "name": "Spots Fade 🎨⋮",
+      "wledId": 86
+    },
+    {
+      "name": "Squared Swirl 🎨▦",
+      "wledId": 150
+    },
+    {
+      "name": "Stream 🎨⋮",
+      "wledId": 39
+    },
+    {
+      "name": "Stream 2 ⋮",
+      "wledId": 61
+    },
+    {
+      "name": "Strobe 🎨•⋮",
+      "wledId": 23
+    },
+    {
+      "name": "Strobe Mega 🎨•⋮",
+      "wledId": 25
+    },
+    {
+      "name": "Strobe Rainbow 🎨•⋮",
+      "wledId": 24
+    },
+    {
+      "name": "Sun Radiation ▦",
+      "wledId": 166
+    },
+    {
+      "name": "Sunrise 🎨⋮",
+      "wledId": 104
+    },
+    {
+      "name": "Sweep 🎨⋮",
+      "wledId": 6
+    },
+    {
+      "name": "Sweep Random 🎨⋮",
+      "wledId": 36
+    },
+    {
+      "name": "Swirl 🎨▦♪",
+      "wledId": 175
+    },
+    {
+      "name": "Tartan 🎨▦",
+      "wledId": 173
+    },
+    {
+      "name": "Tetrix 🎨⋮",
+      "wledId": 44
+    },
+    {
+      "name": "Theater 🎨⋮",
+      "wledId": 13
+    },
+    {
+      "name": "Theater Rainbow 🎨⋮",
+      "wledId": 14
+    },
+    {
+      "name": "Traffic Light 🎨⋮",
+      "wledId": 35
+    },
+    {
+      "name": "Tri Fade 🎨⋮",
+      "wledId": 56
+    },
+    {
+      "name": "Tri Wipe 🎨⋮",
+      "wledId": 55
+    },
+    {
+      "name": "TV Simulator 🎨•⋮",
+      "wledId": 116
+    },
+    {
+      "name": "Twinkle 🎨⋮",
+      "wledId": 17
+    },
+    {
+      "name": "Twinklecat 🎨⋮",
+      "wledId": 81
+    },
+    {
+      "name": "Twinklefox 🎨⋮",
+      "wledId": 80
+    },
+    {
+      "name": "Twinkleup 🎨⋮",
+      "wledId": 106
+    },
+    {
+      "name": "Two Dots 🎨⋮",
+      "wledId": 50
+    },
+    {
+      "name": "Washing Machine 🎨⋮",
+      "wledId": 113
+    },
+    {
+      "name": "Waterfall 🎨•⋮♫",
+      "wledId": 140
+    },
+    {
+      "name": "Waverly 🎨▦♪",
+      "wledId": 165
+    },
+    {
+      "name": "Wavesins 🎨⋮",
+      "wledId": 184
+    },
+    {
+      "name": "Waving Cell 🎨▦",
+      "wledId": 127
+    },
+    {
+      "name": "Wipe 🎨⋮",
+      "wledId": 3
+    },
+    {
+      "name": "Wipe Random 🎨⋮",
+      "wledId": 4
+    }
+  ],
+  "paletteOrder": [
+    {
+      "name": "Default",
+      "wledId": 0
+    },
+    {
+      "name": "* Color 1",
+      "wledId": 2
+    },
+    {
+      "name": "* Color Gradient",
+      "wledId": 4
+    },
+    {
+      "name": "* Colors 1&2",
+      "wledId": 3
+    },
+    {
+      "name": "* Colors Only",
+      "wledId": 5
+    },
+    {
+      "name": "* Random Cycle",
+      "wledId": 1
+    },
+    {
+      "name": "Analogous",
+      "wledId": 18
+    },
+    {
+      "name": "April Night",
+      "wledId": 46
+    },
+    {
+      "name": "Aqua Flash",
+      "wledId": 63
+    },
+    {
+      "name": "Atlantica",
+      "wledId": 51
+    },
+    {
+      "name": "Aurora",
+      "wledId": 50
+    },
+    {
+      "name": "Aurora 2",
+      "wledId": 55
+    },
+    {
+      "name": "Autumn",
+      "wledId": 39
+    },
+    {
+      "name": "Beach",
+      "wledId": 22
+    },
+    {
+      "name": "Beech",
+      "wledId": 26
+    },
+    {
+      "name": "Blink Red",
+      "wledId": 67
+    },
+    {
+      "name": "Breeze",
+      "wledId": 15
+    },
+    {
+      "name": "C9",
+      "wledId": 48
+    },
+    {
+      "name": "C9 2",
+      "wledId": 52
+    },
+    {
+      "name": "C9 New",
+      "wledId": 53
+    },
+    {
+      "name": "Candy",
+      "wledId": 57
+    },
+    {
+      "name": "Candy2",
+      "wledId": 70
+    },
+    {
+      "name": "Cloud",
+      "wledId": 7
+    },
+    {
+      "name": "Cyane",
+      "wledId": 37
+    },
+    {
+      "name": "Departure",
+      "wledId": 24
+    },
+    {
+      "name": "Drywet",
+      "wledId": 30
+    },
+    {
+      "name": "Fairy Reaf",
+      "wledId": 59
+    },
+    {
+      "name": "Fire",
+      "wledId": 35
+    },
+    {
+      "name": "Forest",
+      "wledId": 10
+    },
+    {
+      "name": "Grintage",
+      "wledId": 32
+    },
+    {
+      "name": "Hult",
+      "wledId": 28
+    },
+    {
+      "name": "Hult 64",
+      "wledId": 29
+    },
+    {
+      "name": "Icefire",
+      "wledId": 36
+    },
+    {
+      "name": "Jul",
+      "wledId": 31
+    },
+    {
+      "name": "Landscape",
+      "wledId": 25
+    },
+    {
+      "name": "Lava",
+      "wledId": 8
+    },
+    {
+      "name": "Light Pink",
+      "wledId": 38
+    },
+    {
+      "name": "Lite Light",
+      "wledId": 65
+    },
+    {
+      "name": "Magenta",
+      "wledId": 40
+    },
+    {
+      "name": "Magred",
+      "wledId": 41
+    },
+    {
+      "name": "Ocean",
+      "wledId": 9
+    },
+    {
+      "name": "Orange & Teal",
+      "wledId": 44
+    },
+    {
+      "name": "Orangery",
+      "wledId": 47
+    },
+    {
+      "name": "Party",
+      "wledId": 6
+    },
+    {
+      "name": "Pastel",
+      "wledId": 20
+    },
+    {
+      "name": "Pink Candy",
+      "wledId": 61
+    },
+    {
+      "name": "Rainbow",
+      "wledId": 11
+    },
+    {
+      "name": "Rainbow Bands",
+      "wledId": 12
+    },
+    {
+      "name": "Red & Blue",
+      "wledId": 16
+    },
+    {
+      "name": "Red Flash",
+      "wledId": 66
+    },
+    {
+      "name": "Red Reaf",
+      "wledId": 62
+    },
+    {
+      "name": "Red Shift",
+      "wledId": 68
+    },
+    {
+      "name": "Red Tide",
+      "wledId": 69
+    },
+    {
+      "name": "Retro Clown",
+      "wledId": 56
+    },
+    {
+      "name": "Rewhi",
+      "wledId": 33
+    },
+    {
+      "name": "Rivendell",
+      "wledId": 14
+    },
+    {
+      "name": "Sakura",
+      "wledId": 49
+    },
+    {
+      "name": "Semi Blue",
+      "wledId": 60
+    },
+    {
+      "name": "Sherbet",
+      "wledId": 27
+    },
+    {
+      "name": "Splash",
+      "wledId": 19
+    },
+    {
+      "name": "Sunset",
+      "wledId": 13
+    },
+    {
+      "name": "Sunset 2",
+      "wledId": 21
+    },
+    {
+      "name": "Temperature",
+      "wledId": 54
+    },
+    {
+      "name": "Tertiary",
+      "wledId": 34
+    },
+    {
+      "name": "Tiamat",
+      "wledId": 45
+    },
+    {
+      "name": "Toxy Reaf",
+      "wledId": 58
+    },
+    {
+      "name": "Vintage",
+      "wledId": 23
+    },
+    {
+      "name": "Yelblu",
+      "wledId": 43
+    },
+    {
+      "name": "Yelblu Hot",
+      "wledId": 64
+    },
+    {
+      "name": "Yellowout",
+      "wledId": 17
+    },
+    {
+      "name": "Yelmag",
+      "wledId": 42
+    }
+  ],
+  "paletteColorSlots": {
+    "0": {
+      "name": "Default",
+      "visibleSlotCount": 0,
+      "slotLabels": []
+    },
+    "1": {
+      "name": "* Random Cycle",
+      "visibleSlotCount": 0,
+      "slotLabels": []
+    },
+    "2": {
+      "name": "* Color 1",
+      "visibleSlotCount": 1,
+      "slotLabels": [
+        "1"
+      ]
+    },
+    "3": {
+      "name": "* Colors 1&2",
+      "visibleSlotCount": 2,
+      "slotLabels": [
+        "1",
+        "2"
+      ]
+    },
+    "4": {
+      "name": "* Color Gradient",
+      "visibleSlotCount": 3,
+      "slotLabels": [
+        "1",
+        "2",
+        "3"
+      ]
+    },
+    "5": {
+      "name": "* Colors Only",
+      "visibleSlotCount": 3,
+      "slotLabels": [
+        "1",
+        "2",
+        "3"
+      ]
+    }
+  },
+  "effectColorSlots": {
+    "Solid": {
+      "visibleSlotCount": 3,
+      "slotLabels": [
+        "Fx",
+        "2",
+        "3"
+      ]
+    },
+    "Blink": {
+      "visibleSlotCount": 3,
+      "slotLabels": [
+        "Fx",
+        "Bg",
+        "3"
+      ]
+    },
+    "Fire 2012": {
+      "visibleSlotCount": 3,
+      "slotLabels": [
+        "1",
+        "2",
+        "3"
+      ]
+    },
+    "Chase 3": {
+      "visibleSlotCount": 3,
+      "slotLabels": [
+        "1",
+        "2",
+        "3"
+      ]
+    }
+  },
+  "paletteHasGradientSwatch": true
+}
