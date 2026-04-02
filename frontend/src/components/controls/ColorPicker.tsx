@@ -31,10 +31,10 @@ export function ColorPicker({ colors, colorSlots, selectedPal, onChange }: Props
     const pal = selectedPal ?? 0
     if (pal >= 2 && pal <= 5) {
       return [0, 1, 2].map(i => ({
-        active: colorSlots[i].active
-          || i === 0                    // palettes 2,3,4,5 always show slot 0
-          || (i === 1 && pal >= 3)     // palettes 3,4,5 show slot 1
-          || (i === 2 && pal >= 4),    // palettes 4,5 show slot 2
+        // Palette forces visibility regardless of effect — matches WLED updateSelectedPalette()
+        active: i === 0                // palettes 2,3,4,5 always show slot 0
+          || (i === 1 && pal >= 3)    // palettes 3,4,5 show slot 1
+          || (i === 2 && pal >= 4),   // palettes 4,5 show slot 2
         label: colorSlots[i].label,
       })) as [ColorSlotConfig, ColorSlotConfig, ColorSlotConfig]
     }

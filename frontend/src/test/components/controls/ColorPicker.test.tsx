@@ -145,4 +145,18 @@ describe('selectedPal slot forcing', () => {
     )
     expect(screen.getAllByRole('button')).toHaveLength(1)
   })
+
+  it('pal=2 forces slot 0 only even when all effect slots are active', () => {
+    render(
+      <ColorPicker colors={DEFAULT_COLORS} colorSlots={ALL_ACTIVE} selectedPal={2} onChange={vi.fn()} />
+    )
+    expect(screen.getAllByRole('button')).toHaveLength(1)
+  })
+
+  it('pal=3 forces slots 0-1 only even when all effect slots are active', () => {
+    render(
+      <ColorPicker colors={DEFAULT_COLORS} colorSlots={ALL_ACTIVE} selectedPal={3} onChange={vi.fn()} />
+    )
+    expect(screen.getAllByRole('button')).toHaveLength(2)
+  })
 })
