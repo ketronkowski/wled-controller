@@ -25,6 +25,12 @@ function genGradientCss(
     } else if (e === 'r') {
       pos = Math.round(j / s.length * 100)
       r = g = b = 140  // gray placeholder for random
+    } else if (typeof e === 'string' && /^c[123]$/.test(e)) {
+      // WLED color-slot reference: "c1" → slot 0, "c2" → slot 1, "c3" → slot 2
+      const idx = parseInt(e[1]) - 1
+      const uc = userColors?.[idx] ?? [128, 128, 128] as [number,number,number]
+      r = uc[0]; g = uc[1]; b = uc[2]
+      pos = Math.round(j / s.length * 100)
     } else if (Array.isArray(e) && e[0] === 'c') {
       // user color reference: ["c", colorIndex1Based]
       const idx = (e[1] as number) - 1

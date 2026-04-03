@@ -37,9 +37,12 @@ export function ControlPanel({ state, effects, fxData, palettes, onCommand, send
 
   const [localFx, setLocalFx] = useState<number | null>(null)
   const [localPal, setLocalPal] = useState<number | null>(null)
+  const [localColors, setLocalColors] = useState<[RGB, RGB, RGB] | null>(null)
 
   useEffect(() => { setLocalFx(null) }, [seg?.fx])
   useEffect(() => { setLocalPal(null) }, [seg?.pal])
+  const colKey = JSON.stringify(seg?.col)
+  useEffect(() => { setLocalColors(null) }, [colKey])
 
   const effectiveFx = localFx ?? seg?.fx ?? 0
   const effectivePal = localPal ?? seg?.pal ?? 0
@@ -49,10 +52,12 @@ export function ControlPanel({ state, effects, fxData, palettes, onCommand, send
   if (!seg) return <div className={styles.empty}>No segment data</div>
 
   const colors = (seg.col ?? [[0,0,0],[0,0,0],[0,0,0]]) as [RGB, RGB, RGB]
+  const effectiveColors = localColors ?? colors
 
   const handleCommand = (payload: ControlPayload) => {
     if (payload.fx !== undefined) setLocalFx(payload.fx)
     if (payload.pal !== undefined) setLocalPal(payload.pal)
+    if (payload.col !== undefined) setLocalColors(payload.col as [RGB, RGB, RGB])
     onCommand(payload)
   }
 
@@ -97,7 +102,7 @@ export function ControlPanel({ state, effects, fxData, palettes, onCommand, send
       <div className={styles.content}>
         {tab === 'colors' && (
           <ColorPicker
-            colors={colors}
+            colors={effectiveColors}
             colorSlots={effectParsed.colorSlots}
             selectedPal={effectivePal}
             onChange={cols => handleCommand({ col: cols })}
@@ -124,7 +129,7 @@ export function ControlPanel({ state, effects, fxData, palettes, onCommand, send
             palettes={palettes}
             selected={effectivePal}
             paletteColors={paletteColors}
-            userColors={colors}
+            userColors={effectiveColors}
             onChange={pal => handleCommand({ pal })}
           />
         )}
