@@ -1,8 +1,11 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { ColorPicker } from '../../../components/controls/ColorPicker'
 import type { ColorSlotConfig } from '../../../utils/parseFxData'
+import iro from '@jaames/iro'
+
+const mockColorSet = vi.fn()
 
 // iro.js uses canvas APIs not available in jsdom; mock it
 vi.mock('@jaames/iro', () => ({
@@ -10,11 +13,16 @@ vi.mock('@jaames/iro', () => ({
     ColorPicker: vi.fn(() => ({
       on: vi.fn(),
       off: vi.fn(),
-      color: { set: vi.fn() },
+      color: { set: mockColorSet },
     })),
     ui: { Wheel: {}, Slider: {} },
   },
 }))
+
+beforeEach(() => {
+  vi.mocked(iro.ColorPicker).mockClear()
+  mockColorSet.mockClear()
+})
 
 type RGB = [number, number, number]
 
@@ -158,5 +166,23 @@ describe('selectedPal slot forcing', () => {
       <ColorPicker colors={DEFAULT_COLORS} colorSlots={ALL_ACTIVE} selectedPal={3} onChange={vi.fn()} />
     )
     expect(screen.getAllByRole('button')).toHaveLength(2)
+  })
+})
+
+describe('black slot picker behavior', () => {
+  const BLACK_SLOT: [RGB, RGB, RGB] = [[0, 0, 0], [255, 251, 0], [0, 0, 0]]
+
+  it('initializes picker to white when active slot color is pure black', () => {
+    // Slot 0 is [0,0,0] — iro.js would set v=0, locking hue wheel output to black.
+    // pickerColor() substitutes white so the user can immediately pick any hue.
+    render(<ColorPicker colors={BLACK_SLOT} colorSlots={ALL_ACTIVE} onChange={vi.fn()} />)
+    // The sync useEffect calls picker.color.set() — expect white, not black
+    expect(mockColorSet).toHaveBeenCalledWith({ r: 255, g: 255, b: 255 })
+  })
+
+  it('initializes picker to actual color when slot color is non-black', () => {
+    render(<ColorPicker colors={DEFAULT_COLORS} colorSlots={ALL_ACTIVE} onChange={vi.fn()} />)
+    // DEFAULT_COLORS[0] = [255, 0, 0]
+    expect(mockColorSet).toHaveBeenCalledWith({ r: 255, g: 0, b: 0 })
   })
 })

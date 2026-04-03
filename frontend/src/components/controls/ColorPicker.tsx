@@ -5,6 +5,15 @@ import styles from './ColorPicker.module.css'
 
 type RGB = [number, number, number]
 
+// When a slot's stored color is pure black ([0,0,0]), iro.js sets HSV value to 0.
+// With value=0, any hue wheel interaction still produces [0,0,0] — no visible change.
+// Replace black with white for the picker so the user can immediately pick any hue.
+// The tab swatch reads from `colors[i]` directly and still shows the true stored color.
+function pickerColor(rgb: RGB): { r: number; g: number; b: number } {
+  const [r, g, b] = rgb
+  return r === 0 && g === 0 && b === 0 ? { r: 255, g: 255, b: 255 } : { r, g, b }
+}
+
 interface Props {
   colors: [RGB, RGB, RGB]
   colorSlots: [ColorSlotConfig, ColorSlotConfig, ColorSlotConfig]
@@ -53,7 +62,7 @@ export function ColorPicker({ colors, colorSlots, selectedPal, onChange }: Props
     if (!containerRef.current) return
     const picker = iro.ColorPicker(containerRef.current, {
       width: 200,
-      color: { r: colors[0][0], g: colors[0][1], b: colors[0][2] },
+      color: pickerColor(colors[0]),
       layout: [
         { component: iro.ui.Wheel },
         { component: iro.ui.Slider, options: { sliderType: 'value' } },
@@ -83,8 +92,7 @@ export function ColorPicker({ colors, colorSlots, selectedPal, onChange }: Props
   // Sync color wheel when active slot or colors change
   useEffect(() => {
     if (pickerRef.current) {
-      const [r, g, b] = colors[activeSlot]
-      pickerRef.current.color.set({ r, g, b })
+      pickerRef.current.color.set(pickerColor(colors[activeSlot]))
     }
   }, [activeSlot, colors])
 
