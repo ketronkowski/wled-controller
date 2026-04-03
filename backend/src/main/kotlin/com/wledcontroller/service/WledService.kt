@@ -85,16 +85,24 @@ class WledService(
      .getOrDefault(emptyMap())
 
     fun getAllPaletteColors(ip: String): Map<String, Any> =
-        paletteColorCache.getOrPut(ip) {
+        paletteColorCache.computeIfAbsent(ip) {
             val combined = mutableMapOf<String, Any>()
-            var page = 0
-            while (page <= 20) {
+            var consecutiveFailures = 0
+            for (page in 0..20) {
                 val result = getPaletteColors(ip, page)
                 @Suppress("UNCHECKED_CAST")
-                val p = result["p"] as? Map<String, Any> ?: break
-                if (p.isEmpty()) break
+                val p = result["p"] as? Map<String, Any>
+                if (p == null) {
+                    // Failed page fetch — skip this page, stop after 3 consecutive failures
+                    consecutiveFailures++
+                    if (consecutiveFailures >= 3) break
+                    continue
+                }
+                if (p.isEmpty()) break  // explicit empty page — past the end
+                consecutiveFailures = 0
+                val before = combined.size
                 combined.putAll(p)
-                page++
+                if (combined.size == before) break  // no new keys — WLED is wrapping around
             }
             combined
         }
