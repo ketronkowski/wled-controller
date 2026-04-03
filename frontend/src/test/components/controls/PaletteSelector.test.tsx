@@ -59,9 +59,6 @@ describe('PaletteSelector', () => {
           onChange={vi.fn()}
         />
       )
-      const swatches = screen.getAllByTestId('palette-swatch')
-      // palette index 2 is "* Color 1" — after sort: Default(0), then alphabetical
-      // find the swatch whose button is "* Color 1"
       const btn = screen.getByRole('button', { name: '* Color 1' })
       const swatch = btn.querySelector('[data-testid="palette-swatch"]') as HTMLElement
       expect(swatch.style.background).toContain('rgb(255, 0, 0)')
